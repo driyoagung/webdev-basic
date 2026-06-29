@@ -1,0 +1,29 @@
+/* Kotak Preview Custom untuk Materi HTML */
+.preview-box {
+  padding: 1.5rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  margin-top: -1rem; /* Merapatkan dengan code block di atasnya */
+  margin-bottom: 1.5rem;
+  background-color: var(--vp-c-bg-soft);
+  overflow-x: auto;
+}
+
+/* Memperbaiki jarak elemen pertama dan terakhir dalam kotak preview */
+.preview-box > :first-child {
+  margin-top: 0;
+}
+.preview-box > :last-child {
+  margin-bottom: 0;
+}
+
+/* Label kecil "Preview" di atas kotak */
+.preview-box::before {
+  content: "HASIL PREVIEW:";
+  display: block;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--vp-c-text-2);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}

@@ -31,6 +31,26 @@ Sebuah tabel HTML tersusun atas baris (rows) dan kolom sel (cells).
 </table>
 ```
 
+<div class="preview-box">
+  <table border="1" style="width: 100%; text-align: left;">
+    <tr>
+      <th>No</th>
+      <th>Nama Buah</th>
+      <th>Harga / Kg</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Apel Merah</td>
+      <td>Rp 40.000</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Pisang Cavendish</td>
+      <td>Rp 25.000</td>
+    </tr>
+  </table>
+</div>
+
 ## Struktur Semantik Tabel (Lanjutan)
 
 Jika data tabel Anda sangat banyak, sangat direkomendasikan untuk membagi tabel ke dalam blok Kepala (*Head*), Tubuh (*Body*), dan Kaki (*Foot*). Hal ini penting untuk pembaca layar (Screen Reader) dan juga saat tabel di-print, header akan otomatis terulang di setiap halaman.
