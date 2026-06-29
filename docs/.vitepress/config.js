@@ -37,7 +37,12 @@ export default {
         text: 'JavaScript Dasar',
         collapsed: false,
         items: [
-          { text: 'Pengenalan JS', link: '/js/' }
+          { text: 'Pengenalan & Variabel', link: '/js/' },
+          { text: 'Logika & Perulangan', link: '/js/basic-logic' },
+          { text: 'Function & Scope', link: '/js/functions' },
+          { text: 'Array & Object Methods', link: '/js/data-structures' },
+          { text: 'Async & API', link: '/js/advanced' },
+          { text: 'DOM & Events', link: '/js/dom' }
         ]
       }
     ]
