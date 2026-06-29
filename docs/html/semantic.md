@@ -47,80 +47,95 @@ Area kaki halaman. Biasanya memuat hak cipta, informasi kontak (sering dibungkus
 
 ## Contoh Studi Kasus Layout Semantik
 
-Mari kita gabungkan semuanya. Berikut adalah struktur HTML untuk halaman postingan Blog profesional yang disukai oleh mesin pencari Google:
+Mari kita gabungkan semuanya. Berikut adalah struktur blok layout HTML untuk halaman postingan Blog profesional yang disukai oleh mesin pencari Google:
 
 ```html
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Tutorial HTML Semantik - Blog Coding</title>
-</head>
-<body>
+<header>
+  <h1>Blog Coding</h1>
+  <nav>
+    <a href="/">Beranda</a> | <a href="/tutorial">Tutorial</a>
+  </nav>
+</header>
 
-  <!-- Bagian Kepala Global -->
-  <header>
-    <a href="/">
-      <img src="logo.png" alt="Logo Blog Coding">
-    </a>
-    <nav>
-      <ul>
-        <li><a href="/">Beranda</a></li>
-        <li><a href="/tutorial">Tutorial</a></li>
-        <li><a href="/kontak">Kontak</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Area Dominan Halaman -->
-  <main>
+<main>
+  <!-- Sebuah Artikel Utuh -->
+  <article>
+    <header>
+      <h2>Cara Menguasai Semantic HTML5</h2>
+      <p>Dipublikasikan: 29 Juni 2026</p>
+    </header>
+    <p>Semantic HTML sangat penting untuk SEO...</p>
     
-    <!-- Sebuah Artikel Utuh (Independen) -->
-    <article>
-      <header>
-        <h1>Cara Menguasai Semantic HTML5</h1>
-        <p>Dipublikasikan pada <time datetime="2026-06-29">29 Juni 2026</time> oleh Penulis.</p>
-      </header>
+    <!-- Sub-bagian dari Artikel -->
+    <section>
+      <h3>Mengapa Ini Penting?</h3>
+      <p>Karena Google menyukainya.</p>
+    </section>
+  </article>
 
-      <p>Semantic HTML sangat penting untuk SEO...</p>
-      
-      <!-- Sub-bagian dari Artikel -->
-      <section>
-        <h2>Mengapa Ini Penting?</h2>
-        <p>Karena Google menyukainya.</p>
-      </section>
+  <!-- Sidebar Pendukung -->
+  <aside>
+    <h3>Artikel Terpopuler</h3>
+    <ul>
+      <li><a href="#">Dasar CSS Flexbox</a></li>
+    </ul>
+  </aside>
+</main>
 
-      <!-- Komentar Pengguna (Juga berdiri sendiri) -->
-      <section class="comments">
-        <h2>Komentar (1)</h2>
-        <article>
-          <strong>Budi:</strong>
-          <p>Wah artikel yang sangat membantu, terima kasih!</p>
-        </article>
-      </section>
-    </article>
-
-    <!-- Sidebar Pendukung -->
-    <aside>
-      <h3>Artikel Terpopuler</h3>
-      <ul>
-        <li><a href="#">Dasar CSS Flexbox</a></li>
-        <li><a href="#">Cara Membuat Form</a></li>
-      </ul>
-    </aside>
-
-  </main>
-
-  <!-- Bagian Kaki Global -->
-  <footer>
-    <p>&copy; 2026 Blog Coding. Hak cipta dilindungi.</p>
-    <address>
-      Hubungi kami di <a href="mailto:halo@blogcoding.id">halo@blogcoding.id</a>
-    </address>
-  </footer>
-
-</body>
-</html>
+<footer>
+  <p>&copy; 2026 Blog Coding.</p>
+</footer>
 ```
+
+<div class="preview-box">
+  <!-- Simulasi Layout Semantic dengan border agar strukturnya terlihat -->
+  <div style="font-family: sans-serif; font-size: 0.9rem; line-height: 1.4;">
+    
+    <header style="border: 2px dashed #4CAF50; padding: 1rem; margin-bottom: 1rem; text-align: center;">
+      <span style="font-size: 0.7rem; color: #4CAF50; text-transform: uppercase; font-weight: bold;">&lt;header&gt;</span>
+      <h1 style="margin: 0.5rem 0;">Blog Coding</h1>
+      <nav style="border: 1px dashed #2196F3; padding: 0.5rem; display: inline-block;">
+        <span style="font-size: 0.7rem; color: #2196F3; font-weight: bold; margin-right: 0.5rem;">&lt;nav&gt;</span>
+        <a href="#" style="color: blue;">Beranda</a> | <a href="#" style="color: blue;">Tutorial</a>
+      </nav>
+    </header>
+
+    <main style="border: 2px dashed #F44336; padding: 1rem; margin-bottom: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+      <div style="width: 100%;"><span style="font-size: 0.7rem; color: #F44336; text-transform: uppercase; font-weight: bold;">&lt;main&gt;</span></div>
+      
+      <article style="border: 2px dashed #FF9800; padding: 1rem; flex: 2; min-width: 200px;">
+        <span style="font-size: 0.7rem; color: #FF9800; text-transform: uppercase; font-weight: bold;">&lt;article&gt;</span>
+        
+        <header style="border: 1px dashed #4CAF50; padding: 0.5rem; margin-top: 0.5rem;">
+          <span style="font-size: 0.6rem; color: #4CAF50;">&lt;header&gt; dalam article</span>
+          <h2 style="margin: 0.2rem 0; font-size: 1.2rem;">Cara Menguasai Semantic HTML5</h2>
+          <p style="margin: 0; font-size: 0.8rem; color: #666;">Dipublikasikan: 29 Juni 2026</p>
+        </header>
+
+        <p style="margin: 1rem 0;">Semantic HTML sangat penting untuk SEO...</p>
+        
+        <section style="border: 1px dashed #9C27B0; padding: 0.5rem;">
+          <span style="font-size: 0.6rem; color: #9C27B0;">&lt;section&gt;</span>
+          <h3 style="margin: 0.2rem 0; font-size: 1rem;">Mengapa Ini Penting?</h3>
+          <p style="margin: 0;">Karena Google menyukainya.</p>
+        </section>
+      </article>
+
+      <aside style="border: 2px dashed #009688; padding: 1rem; flex: 1; min-width: 150px; background: rgba(0,0,0,0.03);">
+        <span style="font-size: 0.7rem; color: #009688; text-transform: uppercase; font-weight: bold;">&lt;aside&gt;</span>
+        <h3 style="margin-top: 0.5rem; font-size: 1rem;">Artikel Terpopuler</h3>
+        <ul style="padding-left: 1rem; margin: 0;">
+          <li><a href="#" style="color: blue;">Dasar CSS</a></li>
+        </ul>
+      </aside>
+    </main>
+
+    <footer style="border: 2px dashed #607D8B; padding: 1rem; text-align: center;">
+      <span style="font-size: 0.7rem; color: #607D8B; text-transform: uppercase; font-weight: bold;">&lt;footer&gt;</span>
+      <p style="margin: 0.5rem 0 0 0;">&copy; 2026 Blog Coding.</p>
+    </footer>
+
+  </div>
+</div>
 
 Menggunakan tag Semantic ini menandakan bahwa Anda bukan hanya bisa menulis kode HTML asal tampil, melainkan menulis kode Web berstandar Industri modern (*Best Practices*).

@@ -12,7 +12,7 @@ Sebuah tabel HTML tersusun atas baris (rows) dan kolom sel (cells).
 - **`<td>` (Table Data)**: Sel data biasa.
 
 ```html
-<table border="1"> <!-- Atribut border="1" murni untuk melihat batas tabel secara kasar tanpa CSS -->
+<table border="1">
   <tr>
     <th>No</th>
     <th>Nama Buah</th>
@@ -32,21 +32,21 @@ Sebuah tabel HTML tersusun atas baris (rows) dan kolom sel (cells).
 ```
 
 <div class="preview-box">
-  <table border="1" style="width: 100%; text-align: left;">
+  <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
     <tr>
-      <th>No</th>
-      <th>Nama Buah</th>
-      <th>Harga / Kg</th>
+      <th style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">No</th>
+      <th style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Nama Buah</th>
+      <th style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Harga / Kg</th>
     </tr>
     <tr>
-      <td>1</td>
-      <td>Apel Merah</td>
-      <td>Rp 40.000</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">1</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Apel Merah</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Rp 40.000</td>
     </tr>
     <tr>
-      <td>2</td>
-      <td>Pisang Cavendish</td>
-      <td>Rp 25.000</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">2</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Pisang Cavendish</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Rp 25.000</td>
     </tr>
   </table>
 </div>
@@ -58,12 +58,11 @@ Jika data tabel Anda sangat banyak, sangat direkomendasikan untuk membagi tabel 
 - **`<thead>`**: Kepala tabel (biasanya membungkus baris header `<th>`).
 - **`<tbody>`**: Isi konten utama tabel.
 - **`<tfoot>`**: Kaki tabel (biasanya untuk baris total/kesimpulan).
-- **`<caption>`**: Judul resmi / keterangan tabel (Letakkan tepat di bawah tag pembuka `<table>`).
+- **`<caption>`**: Judul resmi / keterangan tabel.
 
 ```html
 <table border="1" width="100%">
   <caption>Daftar Penjualan Toko Bulan Ini</caption>
-  
   <thead>
     <tr>
       <th>Produk</th>
@@ -71,7 +70,6 @@ Jika data tabel Anda sangat banyak, sangat direkomendasikan untuk membagi tabel 
       <th>Pendapatan</th>
     </tr>
   </thead>
-  
   <tbody>
     <tr>
       <td>Keyboard Mekanik</td>
@@ -84,7 +82,6 @@ Jika data tabel Anda sangat banyak, sangat direkomendasikan untuk membagi tabel 
       <td>Rp 15.000.000</td>
     </tr>
   </tbody>
-  
   <tfoot>
     <tr>
       <td colspan="2"><strong>Total Pendapatan</strong></td>
@@ -93,6 +90,37 @@ Jika data tabel Anda sangat banyak, sangat direkomendasikan untuk membagi tabel 
   </tfoot>
 </table>
 ```
+
+<div class="preview-box">
+  <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
+    <caption style="margin-bottom: 0.5rem; font-weight: bold; font-size: 1.1em;">Daftar Penjualan Toko Bulan Ini</caption>
+    <thead style="background-color: var(--vp-c-bg-alt);">
+      <tr>
+        <th style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Produk</th>
+        <th style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Terjual</th>
+        <th style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Pendapatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Keyboard Mekanik</td>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">50 unit</td>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Rp 25.000.000</td>
+      </tr>
+      <tr>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Mouse Wireless</td>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">100 unit</td>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Rp 15.000.000</td>
+      </tr>
+    </tbody>
+    <tfoot style="background-color: var(--vp-c-bg-alt);">
+      <tr>
+        <td colspan="2" style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);"><strong>Total Pendapatan</strong></td>
+        <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);"><strong>Rp 40.000.000</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
 
 ## Menggabungkan Sel: Colspan dan Rowspan
 
@@ -111,7 +139,7 @@ Mirip fitur *Merge Cells* di Microsoft Excel, Anda bisa membuat satu kolom memak
     <td>Budi Santoso</td>
   </tr>
   <tr>
-    <td rowspan="2">Alamat (Tergabung 2 Baris ke bawah):</td>
+    <td rowspan="2">Alamat<br>(Tergabung 2 Baris ke bawah):</td>
     <td>Jl. Mawar Merah No 5</td>
   </tr>
   <tr>
@@ -120,4 +148,21 @@ Mirip fitur *Merge Cells* di Microsoft Excel, Anda bisa membuat satu kolom memak
 </table>
 ```
 
-> **Tips CSS untuk Tabel:** Secara bawaan (default), tampilan tabel HTML sangatlah kaku dan jelek. Kita butuh sentuhan CSS (seperti `border-collapse: collapse;`, `padding`, dan `background-color`) untuk menyulap tabel ini menjadi indah layaknya tabel di dashboard aplikasi modern!
+<div class="preview-box">
+  <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
+    <tr>
+      <th colspan="2" style="padding: 0.5rem; border: 1px solid var(--vp-c-divider); text-align: center; background-color: var(--vp-c-bg-alt);">Data Diri Pegawai (Tergabung 2 Kolom)</th>
+    </tr>
+    <tr>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider); font-weight: bold; width: 40%;">Nama:</td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Budi Santoso</td>
+    </tr>
+    <tr>
+      <td rowspan="2" style="padding: 0.5rem; border: 1px solid var(--vp-c-divider); font-weight: bold; vertical-align: top;">Alamat<br><span style="font-size:0.8em; font-weight:normal;">(Tergabung 2 Baris ke bawah):</span></td>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Jl. Mawar Merah No 5</td>
+    </tr>
+    <tr>
+      <td style="padding: 0.5rem; border: 1px solid var(--vp-c-divider);">Kecamatan Sukamaju</td>
+    </tr>
+  </table>
+</div>
