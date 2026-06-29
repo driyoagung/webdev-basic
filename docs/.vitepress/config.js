@@ -25,7 +25,12 @@ export default {
         text: 'CSS Dasar',
         collapsed: false,
         items: [
-          { text: 'Pengenalan CSS', link: '/css/' }
+          { text: 'Pengenalan & Selektor', link: '/css/' },
+          { text: 'Box Model', link: '/css/box-model' },
+          { text: 'Teks & Warna', link: '/css/typography-colors' },
+          { text: 'Layout Flexbox', link: '/css/flexbox' },
+          { text: 'Layout Grid', link: '/css/grid' },
+          { text: 'Responsive & Media', link: '/css/responsive' }
         ]
       },
       {
