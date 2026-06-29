@@ -73,6 +73,17 @@ Mari kita manfaatkan `@media` untuk mengubah layout kotak **Grid** yang sebelumn
 ```
 
 <div class="preview-box">
+<div class="grid-responsif">
+  <div class="kotak-r">Kolom 1</div>
+  <div class="kotak-r">Kolom 2</div>
+  <div class="kotak-r">Kolom 3</div>
+  <div class="kotak-r">Kolom 4</div>
+</div>
+<p style="text-align:center; font-size: 0.8rem; margin-top: 15px; color: gray;">
+  <em>💡 Coba perkecil/perbesar ukuran jendela (window) browser Anda sekarang untuk melihat keajaibannya!</em>
+</p>
+</div>
+
 <style scoped>
   .grid-responsif {
     display: grid;
@@ -97,13 +108,3 @@ Mari kita manfaatkan `@media` untuk mengubah layout kotak **Grid** yang sebelumn
     .kotak-r { background-color: #3F51B5; }
   }
 </style>
-<div class="grid-responsif">
-  <div class="kotak-r">Kolom 1</div>
-  <div class="kotak-r">Kolom 2</div>
-  <div class="kotak-r">Kolom 3</div>
-  <div class="kotak-r">Kolom 4</div>
-</div>
-<p style="text-align:center; font-size: 0.8rem; margin-top: 15px; color: gray;">
-  <em>💡 Coba perkecil/perbesar ukuran jendela (window) browser Anda sekarang untuk melihat keajaibannya!</em>
-</p>
-</div>

@@ -93,7 +93,13 @@ Berikut adalah contoh bagaimana CSS menyulap HTML polos menjadi lebih menarik:
 ```
 
 <div class="preview-box">
-<style scoped>
+<div class="card-contoh">
+  <h2>Ini adalah Judul Card</h2>
+  <p>Teks ini berada di dalam sebuah div yang diberi class "card-contoh".</p>
+</div>
+</div>
+
+<style>
   .card-contoh {
     background-color: white;
     border: 2px solid #ccc;
@@ -110,8 +116,3 @@ Berikut adalah contoh bagaimana CSS menyulap HTML polos menjadi lebih menarik:
     font-size: 16px;
   }
 </style>
-<div class="card-contoh">
-  <h2>Ini adalah Judul Card</h2>
-  <p>Teks ini berada di dalam sebuah div yang diberi class "card-contoh".</p>
-</div>
-</div>

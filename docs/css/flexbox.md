@@ -73,25 +73,6 @@ Mari kita lihat kehebatan Flexbox dalam dunia nyata:
 ```
 
 <div class="preview-box">
-<style scoped>
-  .navbar-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-  }
-  .nav-links {
-    display: flex;
-    gap: 15px;
-    list-style: none;
-    margin: 0; padding: 0;
-  }
-  .nav-links li { cursor: pointer; }
-  .nav-links li:hover { color: #4CAF50; }
-</style>
 <nav class="navbar-flex">
   <div class="logo"><strong>MY-LOGO</strong></div>
   <ul class="nav-links">
@@ -131,7 +112,32 @@ Dulu ini adalah hal yang paling sulit dilakukan di CSS. Dengan Flexbox, cukup 3 
 ```
 
 <div class="preview-box">
+<div class="super-center">
+  <div class="kotak-kecil">Saya di tengah persis!</div>
+</div>
+</div>
+
 <style scoped>
+  /* Contoh 1: Navbar */
+  .navbar-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  .nav-links li { cursor: pointer; }
+  .nav-links li:hover { color: #4CAF50; }
+
+  /* Contoh 2: Super Center */
   .super-center {
     display: flex;
     justify-content: center;
@@ -149,7 +155,3 @@ Dulu ini adalah hal yang paling sulit dilakukan di CSS. Dengan Flexbox, cukup 3 
     border-radius: 4px;
   }
 </style>
-<div class="super-center">
-  <div class="kotak-kecil">Saya di tengah persis!</div>
-</div>
-</div>

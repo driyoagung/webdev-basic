@@ -52,6 +52,16 @@ Mari kita buat grid galeri foto 3 kolom yang rapi dengan `gap`.
 ```
 
 <div class="preview-box">
+<div class="grid-container">
+  <div class="grid-item">1</div>
+  <div class="grid-item">2</div>
+  <div class="grid-item">3</div>
+  <div class="grid-item">4</div>
+  <div class="grid-item">5</div>
+  <div class="grid-item">6</div>
+</div>
+</div>
+
 <style scoped>
   .grid-container {
     display: grid;
@@ -68,15 +78,6 @@ Mari kita buat grid galeri foto 3 kolom yang rapi dengan `gap`.
     border-radius: 8px;
   }
 </style>
-<div class="grid-container">
-  <div class="grid-item">1</div>
-  <div class="grid-item">2</div>
-  <div class="grid-item">3</div>
-  <div class="grid-item">4</div>
-  <div class="grid-item">5</div>
-  <div class="grid-item">6</div>
-</div>
-</div>
 
 ## Kapan Menggunakan Grid vs Flexbox?
 

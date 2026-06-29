@@ -29,6 +29,14 @@ Ketika kita mengatur jarak antar elemen atau ukuran sebuah elemen, kita harus me
 ```
 
 <div class="preview-box">
+<div class="kotak-belajar">
+  Ini adalah Konten (200px)
+</div>
+<div style="text-align:center; font-size: 0.8rem; color: gray;">
+  ^ Kotak di atas memiliki Margin (luar), Border (biru 5px), dan Padding (ruang dalam 20px).
+</div>
+</div>
+
 <style scoped>
   .kotak-belajar {
     background-color: #E3F2FD;
@@ -41,13 +49,6 @@ Ketika kita mengatur jarak antar elemen atau ukuran sebuah elemen, kita harus me
     color: #333;
   }
 </style>
-<div class="kotak-belajar">
-  Ini adalah Konten (200px)
-</div>
-<div style="text-align:center; font-size: 0.8rem; color: gray;">
-  ^ Kotak di atas memiliki Margin (luar), Border (biru 5px), dan Padding (ruang dalam 20px).
-</div>
-</div>
 
 ## Membedah Properti Box Model
 

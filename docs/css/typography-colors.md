@@ -95,6 +95,12 @@ Bisa menggunakan nilai string (`normal`, `bold`) atau angka (`400`, `700`).
 ```
 
 <div class="preview-box">
+<div class="contoh-artikel">
+  <h2>Berita Terkini <span class="badge">HOT</span></h2>
+  <p>Penggunaan kombinasi font yang tepat, dipadukan dengan jarak baris (line-height) yang ideal dan kontras warna yang baik, akan membuat artikel website Anda terlihat sangat profesional dan nyaman dibaca berlama-lama oleh pengunjung. Ini adalah kunci dari UI/UX Design dasar.</p>
+</div>
+</div>
+
 <style scoped>
   .contoh-artikel {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -124,8 +130,3 @@ Bisa menggunakan nilai string (`normal`, `bold`) atau angka (`400`, `700`).
     font-size: 0.8rem;
   }
 </style>
-<div class="contoh-artikel">
-  <h2>Berita Terkini <span class="badge">HOT</span></h2>
-  <p>Penggunaan kombinasi font yang tepat, dipadukan dengan jarak baris (line-height) yang ideal dan kontras warna yang baik, akan membuat artikel website Anda terlihat sangat profesional dan nyaman dibaca berlama-lama oleh pengunjung. Ini adalah kunci dari UI/UX Design dasar.</p>
-</div>
-</div>
