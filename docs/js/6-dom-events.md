@@ -140,42 +140,13 @@ const inputTeks = ref('')
 </script>
 
 <div class="preview-box">
-  <div :style="{ 
-      padding: '20px', 
-      textAlign: 'center', 
-      border: '2px solid #ccc', 
-      borderRadius: '8px', 
-      transition: 'all 0.3s ease',
-      backgroundColor: isDark ? '#222' : 'white',
-      color: isDark ? 'white' : 'black',
-      borderColor: isDark ? '#444' : '#ccc'
-    }">
-    
-    <h3 style="margin-top:0;">{{ isDark ? 'Dark Mode Aktif 🌙' : 'Light Mode Aktif ☀️' }}</h3>
-    
-    <div style="margin: 20px 0;">
-      <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Event 'input'</strong> (Ketik di bawah):</p>
-      <input 
-        v-model="inputTeks" 
-        placeholder="Ketik sesuatu..." 
-        style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; width: 80%;"
-      />
-      <p style="margin-top: 10px; font-weight: bold; color: #2196F3;">{{ inputTeks || '(Teks akan muncul di sini)' }}</p>
-    </div>
-
-    <button 
-      @click="isDark = !isDark"
-      :style="{
-        padding: '10px 20px', 
-        fontWeight: 'bold', 
-        cursor: 'pointer', 
-        border: 'none', 
-        borderRadius: '4px',
-        backgroundColor: isDark ? '#FF9800' : '#2196F3',
-        color: 'white'
-      }"
-    >
-      Ganti Tema (Event 'click')
-    </button>
-  </div>
+<div :style="{ padding: '20px', textAlign: 'center', border: '2px solid #ccc', borderRadius: '8px', transition: 'all 0.3s ease', backgroundColor: isDark ? '#222' : 'white', color: isDark ? 'white' : 'black', borderColor: isDark ? '#444' : '#ccc' }">
+<h3 style="margin-top:0;">{{ isDark ? 'Dark Mode Aktif 🌙' : 'Light Mode Aktif ☀️' }}</h3>
+<div style="margin: 20px 0;">
+<p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Event 'input'</strong> (Ketik di bawah):</p>
+<input v-model="inputTeks" placeholder="Ketik sesuatu..." style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; width: 80%;" />
+<p style="margin-top: 10px; font-weight: bold; color: #2196F3;">{{ inputTeks || '(Teks akan muncul di sini)' }}</p>
+</div>
+<button @click="isDark = !isDark" :style="{ padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', border: 'none', borderRadius: '4px', backgroundColor: isDark ? '#FF9800' : '#2196F3', color: 'white' }">Ganti Tema (Event 'click')</button>
+</div>
 </div>
