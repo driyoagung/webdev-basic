@@ -16,6 +16,7 @@ export default {
           { text: 'Pengenalan HTML', link: '/html/' },
           { text: 'Teks & Formatting', link: '/html/teks-formatting' },
           { text: 'Media & Link', link: '/html/media-link' },
+          { text: 'Tabel (Tables)', link: '/html/tabel' },
           { text: 'Form & Input', link: '/html/form-input' },
           { text: 'Semantic HTML', link: '/html/semantic' }
         ]
