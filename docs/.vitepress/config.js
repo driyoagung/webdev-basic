@@ -10,11 +10,28 @@ export default {
     ],
     sidebar: [
       {
-        text: 'Materi Dasar',
+        text: 'HTML Dasar',
+        collapsed: false,
         items: [
-          { text: 'HTML', link: '/html/' },
-          { text: 'CSS', link: '/css/' },
-          { text: 'JavaScript', link: '/js/' }
+          { text: 'Pengenalan HTML', link: '/html/' },
+          { text: 'Teks & Formatting', link: '/html/teks-formatting' },
+          { text: 'Media & Link', link: '/html/media-link' },
+          { text: 'Form & Input', link: '/html/form-input' },
+          { text: 'Semantic HTML', link: '/html/semantic' }
+        ]
+      },
+      {
+        text: 'CSS Dasar',
+        collapsed: false,
+        items: [
+          { text: 'Pengenalan CSS', link: '/css/' }
+        ]
+      },
+      {
+        text: 'JavaScript Dasar',
+        collapsed: false,
+        items: [
+          { text: 'Pengenalan JS', link: '/js/' }
         ]
       }
     ]
