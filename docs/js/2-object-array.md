@@ -147,3 +147,174 @@ hewan.forEach((h) => {
 // Saya memelihara Kucing
 // Saya memelihara Anjing
 ```
+
+## Object Methods Penting
+```js
+const buah = { apel: 5, jeruk: 3, mangga: 7 };
+
+// Object.keys() — array dari semua key
+console.log(Object.keys(buah)); // ["apel", "jeruk", "mangga"]
+
+// Object.values() — array dari semua value
+console.log(Object.values(buah)); // [5, 3, 7]
+
+// Object.entries() — array dari [key, value]
+console.log(Object.entries(buah)); // [["apel",5], ["jeruk",3], ["mangga",7]]
+
+// Object.assign(target, source) — copy/menggabung object
+const target = { a: 1 };
+const hasil = Object.assign(target, { b: 2, c: 3 });
+console.log(hasil); // { a: 1, b: 2, c: 3 }
+
+// Object.freeze() — bekukan object (tidak bisa diubah)
+const konstan = Object.freeze({ pi: 3.14 });
+// konstan.pi = 3; // ❌ Tidak berpengaruh / Error (strict mode)
+
+// Object.fromEntries() — kebalikan Object.entries()
+const entries = [["nama", "Budi"], ["umur", 20]];
+console.log(Object.fromEntries(entries)); // { nama: "Budi", umur: 20 }
+```
+
+## Array Destructuring Lebih Dalam
+```js
+const arr = [10, 20, 30, 40];
+
+// Skip element
+const [a, , c] = arr;
+console.log(a, c); // 10 30
+
+// Default value
+const [x = 1, y = 2] = [];
+console.log(x, y); // 1 2
+
+// Swap variables (tanpa temp!)
+let p = 5, q = 10;
+[p, q] = [q, p];
+console.log(p, q); // 10 5
+
+// Nested destructuring
+const data = ["Budi", ["Jakarta", "Bandung"]];
+const [nama, [kota1, kota2]] = data;
+console.log(kota1); // "Jakarta"
+```
+
+## `Array.from()` & `Array.of()`
+```js
+// Array.from() — ubah iterable/array-like ke array
+const divs = document.querySelectorAll("div"); // NodeList (bukan array)
+const arrDiv = Array.from(divs); // Sekarang array asli → bisa .map(), .filter(), dll
+
+console.log(Array.from("Halo"));         // ["H", "a", "l", "o"]
+console.log(Array.from([1, 2], x => x * 2)); // [2, 4]
+
+// Array.of() — buat array dari argumen (konsisten)
+console.log(Array.of(7));       // [7]
+console.log(Array.of(1, 2, 3)); // [1, 2, 3]
+// Bandingkan dengan new Array(7) → [empty × 7] (beda perilaku!)
+```
+
+### `Array.isArray()`
+```js
+console.log(Array.isArray([1, 2]));   // true
+console.log(Array.isArray("Halo"));   // false
+console.log(Array.isArray({ a: 1 })); // false
+```
+
+## Method Array Tambahan
+```js
+const arr = [10, 20, 30, 40, 20];
+
+// findIndex() — indeks pertama yang cocok
+console.log(arr.findIndex(n => n > 25)); // 2
+
+// indexOf() / lastIndexOf()
+console.log(arr.indexOf(20));     // 1
+console.log(arr.lastIndexOf(20)); // 4
+
+// slice(start, end) — potong (non-mutasi)
+console.log(arr.slice(1, 3)); // [20, 30]
+
+// splice(start, deleteCount, ...items) — hapus/sisip (MUTASI!)
+const spl = [1, 2, 3, 4];
+spl.splice(1, 2, "a", "b");
+console.log(spl); // [1, "a", "b", 4]
+
+// concat() — gabung array (non-mutasi)
+console.log([1, 2].concat([3, 4])); // [1, 2, 3, 4]
+
+// flat(depth) — ratakan array bersarang
+console.log([1, [2, [3]]].flat(2)); // [1, 2, 3]
+
+// flatMap() — map lalu flat(1)
+console.log([1, 2].flatMap(n => [n, n * 2])); // [1, 2, 2, 4]
+
+// at(index) — akses dengan indeks negatif
+console.log(["a", "b", "c"].at(-1)); // "c"
+
+// reverse() — balik urutan (MUTASI!)
+const rev = [1, 2, 3];
+rev.reverse();
+console.log(rev); // [3, 2, 1]
+
+// join(separator) — gabung ke string
+console.log(["a", "b", "c"].join("-")); // "a-b-c"
+
+// keys() / values() / entries() — iterator
+const iterArr = ["x", "y"];
+console.log([...iterArr.keys()]);    // [0, 1]
+console.log([...iterArr.values()]);  // ["x", "y"]
+console.log([...iterArr.entries()]); // [[0, "x"], [1, "y"]]
+```
+
+## Mutator vs Non-Mutator
+| Mutator (ubah array asli) | Non-Mutator (array baru) |
+|---|---|
+| `.push()`, `.pop()` | `.map()` |
+| `.shift()`, `.unshift()` | `.filter()` |
+| `.splice()` | `.slice()` |
+| `.sort()` | `.concat()` |
+| `.reverse()` | `.flat()`, `.flatMap()` |
+
+```js
+const original = [1, 2, 3];
+const copy = original.map(n => n); // Tidak mengubah original
+original.push(4);                   // Mengubah original!
+console.log(original); // [1, 2, 3, 4]
+```
+
+## `push` / `pop` / `shift` / `unshift`
+```js
+const arr = [2, 3];
+
+arr.push(4);       // Tambah di BELAKANG → [2, 3, 4]
+arr.unshift(1);    // Tambah di DEPAN     → [1, 2, 3, 4]
+arr.pop();         // Hapus dari BELAKANG → [1, 2, 3] — return: 4
+arr.shift();       // Hapus dari DEPAN    → [2, 3]    — return: 1
+```
+
+## Method Chaining
+```js
+const angka = [5, 2, 8, 1, 9, 3];
+
+const hasil = angka
+  .filter(n => n > 3)   // [5, 8, 9]
+  .map(n => n * 10)     // [50, 80, 90]
+  .sort((a, b) => a - b) // [50, 80, 90]
+  .join(" → ");          // "50 → 80 → 90"
+
+console.log(hasil); // "50 → 80 → 90"
+```
+
+## `toSorted()`, `toReversed()`, `toSpliced()` (ES2023)
+Versi **immutable** (tidak mengubah array asli) dari `sort`, `reverse`, `splice`.
+
+```js
+const arr = [3, 1, 4, 1, 5];
+
+const sorted = arr.toSorted();     // [1, 1, 3, 4, 5]
+const reversed = arr.toReversed(); // [5, 1, 4, 1, 3]
+const spliced = arr.toSpliced(1, 2, 9, 9); // [3, 9, 9, 1, 5]
+
+console.log(arr);      // [3, 1, 4, 1, 5] — TETAP, tidak berubah!
+console.log(sorted);   // [1, 1, 3, 4, 5]
+```

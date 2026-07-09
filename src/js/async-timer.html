@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Async & Timer JavaScript</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      padding: 32px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 32px;
+      font-size: 0.9rem;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .section h2 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      background: #3498db;
+      color: #fff;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    button:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    .display-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .result-box {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: #f0f4f8;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      min-height: 40px;
+    }
+
+    .result-box.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .result-box.error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .result-box.info {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Async & Timer JavaScript</h1>
+  <p class="subtitle">setTimeout &bull; setInterval &bull; Promise &bull; Async/Await</p>
+
+  <!-- 1. setTimeout -->
+  <div class="section">
+    <h2>1. setTimeout — Timer 3 Detik</h2>
+    <div class="row">
+      <button onclick="mulaiTimer()">Mulai Timer 3 Detik</button>
+      <span style="color:#888; font-size:0.85rem;" id="timerStatus">Menunggu...</span>
+    </div>
+  </div>
+
+  <!-- 2. setInterval -->
+  <div class="section">
+    <h2>2. setInterval — Counter Otomatis</h2>
+    <div class="row">
+      <span class="display-value" id="intervalCounter">0</span>
+      <span style="color:#888;">detik</span>
+    </div>
+    <div class="row" style="margin-top:8px;">
+      <button id="btnIntervalStart" onclick="startInterval()">Start</button>
+      <button id="btnIntervalStop" onclick="stopInterval()" disabled>Stop</button>
+    </div>
+  </div>
+
+  <!-- 3. Promise -->
+  <div class="section">
+    <h2>3. Promise — Resolve / Reject Random</h2>
+    <div class="row">
+      <button onclick="jalanPromise()">Jalankan Promise</button>
+    </div>
+    <div class="result-box" id="promiseResult">Hasil akan muncul di sini...</div>
+  </div>
+
+  <!-- 4. Async/Await -->
+  <div class="section">
+    <h2>4. Async/Await — Simulasi Ambil Data</h2>
+    <div class="row">
+      <button id="btnAmbilData" onclick="ambilData()">Ambil Data (delay 2 detik)</button>
+    </div>
+    <div class="result-box" id="asyncResult">Klik tombol untuk memulai simulasi...</div>
+  </div>
+
+  <script>
+    // ---- 1. setTimeout ----
+    function mulaiTimer() {
+      var status = document.getElementById('timerStatus');
+      status.textContent = 'Timer berjalan... tunggu 3 detik.';
+
+      setTimeout(function () {
+        alert('⏰ 3 detik telah berlalu!');
+        status.textContent = 'Selesai!';
+      }, 3000);
+    }
+
+    // ---- 2. setInterval ----
+    var intervalId = null;
+    var detik = 0;
+
+    function startInterval() {
+      // Hentikan interval yang sudah berjalan (jika ada)
+      if (intervalId !== null) return;
+
+      intervalId = setInterval(function () {
+        detik++;
+        document.getElementById('intervalCounter').textContent = detik;
+      }, 1000);
+
+      document.getElementById('btnIntervalStart').disabled = true;
+      document.getElementById('btnIntervalStop').disabled = false;
+    }
+
+    function stopInterval() {
+      clearInterval(intervalId);
+      intervalId = null;
+
+      document.getElementById('btnIntervalStart').disabled = false;
+      document.getElementById('btnIntervalStop').disabled = true;
+    }
+
+    // ---- 3. Promise ----
+    function buatPromise() {
+      return new Promise(function (resolve, reject) {
+        // Simulasi delay 1 detik
+        setTimeout(function () {
+          var sukses = Math.random() > 0.5;
+          if (sukses) {
+            resolve('Berhasil! Promise resolved ✓');
+          } else {
+            reject('Gagal! Promise rejected ✗');
+          }
+        }, 1000);
+      });
+    }
+
+    function jalanPromise() {
+      var box = document.getElementById('promiseResult');
+      box.textContent = 'Menjalankan Promise...';
+      box.className = 'result-box info';
+
+      buatPromise()
+        .then(function (hasil) {
+          box.textContent = hasil;
+          box.className = 'result-box success';
+        })
+        .catch(function (err) {
+          box.textContent = err;
+          box.className = 'result-box error';
+        });
+    }
+
+    // ---- 4. Async/Await ----
+    // Simulasi fetch data dengan delay
+    function fetchDataPalsu() {
+      return new Promise(function (resolve) {
+        setTimeout(function () {
+          resolve({
+            nama: 'Budi Santoso',
+            email: 'budi@example.com',
+            umur: 28,
+            kota: 'Jakarta',
+          });
+        }, 2000);
+      });
+    }
+
+    async function ambilData() {
+      var box = document.getElementById('asyncResult');
+      var btn = document.getElementById('btnAmbilData');
+
+      btn.disabled = true;
+      btn.textContent = 'Mengambil data...';
+      box.textContent = '⏳ Mengambil data dari server... (tunggu 2 detik)';
+      box.className = 'result-box info';
+
+      try {
+        var data = await fetchDataPalsu();
+        box.textContent =
+          '✅ Data berhasil diambil!\n\n' +
+          'Nama  : ' + data.nama + '\n' +
+          'Email : ' + data.email + '\n' +
+          'Umur  : ' + data.umur + '\n' +
+          'Kota  : ' + data.kota;
+        box.className = 'result-box success';
+      } catch (err) {
+        box.textContent = '❌ Gagal: ' + err.message;
+        box.className = 'result-box error';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Ambil Data (delay 2 detik)';
+      }
+    }
+  </script>
+
+</body>
+</html>

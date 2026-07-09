@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Grid Layout</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #eef2f7;
+      color: #333;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-areas:
+        "header  header  header"
+        "sidebar content1 content1"
+        "sidebar content2 content3"
+        "footer  footer  footer";
+      grid-template-columns: 220px 1fr 1fr;
+      grid-template-rows: 60px 1fr 1fr 50px;
+      gap: 16px;
+      padding: 16px;
+      min-height: 100vh;
+    }
+
+    /* Area styling */
+    .header {
+      grid-area: header;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 8px;
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .sidebar h3 {
+      margin-bottom: 16px;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      padding: 10px 12px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .sidebar li:hover {
+      background: #f0f4ff;
+    }
+
+    .sidebar li.aktif {
+      background: #e8f0fe;
+      color: #1a73e8;
+      font-weight: 600;
+    }
+
+    .content1 {
+      grid-area: content1;
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .content2 {
+      grid-area: content2;
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .content3 {
+      grid-area: content3;
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .footer {
+      grid-area: footer;
+      background: #1a1a2e;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .area-label {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    .card-stat {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .card-stat .stat-angka {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a73e8;
+    }
+
+    .card-stat .stat-label {
+      color: #777;
+      font-size: 0.85rem;
+    }
+
+    /* ===== Responsive: Tablet ===== */
+    @media (max-width: 900px) {
+      .dashboard {
+        grid-template-areas:
+          "header  header"
+          "sidebar content1"
+          "sidebar content2"
+          "sidebar content3"
+          "footer  footer";
+        grid-template-columns: 200px 1fr;
+        grid-template-rows: 60px auto auto auto 50px;
+      }
+    }
+
+    /* ===== Responsive: Mobile ===== */
+    @media (max-width: 600px) {
+      .dashboard {
+        grid-template-areas:
+          "header"
+          "sidebar"
+          "content1"
+          "content2"
+          "content3"
+          "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .sidebar li {
+        margin-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+
+    <header class="header">Dashboard Grid</header>
+
+    <aside class="sidebar">
+      <h3>Menu</h3>
+      <ul>
+        <li class="aktif">Beranda</li>
+        <li>Analitik</li>
+        <li>Laporan</li>
+        <li>Pengaturan</li>
+        <li>Bantuan</li>
+      </ul>
+    </aside>
+
+    <section class="content1">
+      <div class="area-label">Ringkasan</div>
+      <p style="color:#666; line-height:1.6;">Selamat datang di dashboard. Area ini menampilkan ringkasan data utama.</p>
+      <div class="card-stat">
+        <span class="stat-angka">1,234</span>
+        <span class="stat-label">pengunjung hari ini</span>
+      </div>
+    </section>
+
+    <section class="content2">
+      <div class="area-label">Statistik</div>
+      <p style="color:#666; line-height:1.6;">Grafik dan metrik performa akan ditampilkan di sini.</p>
+      <div class="card-stat">
+        <span class="stat-angka">89%</span>
+        <span class="stat-label">tingkat kepuasan</span>
+      </div>
+    </section>
+
+    <section class="content3">
+      <div class="area-label">Aktivitas Terbaru</div>
+      <p style="color:#666; line-height:1.6;">Log aktivitas dan notifikasi terbaru muncul di area ini.</p>
+      <div class="card-stat">
+        <span class="stat-angka">12</span>
+        <span class="stat-label">notifikasi baru</span>
+      </div>
+    </section>
+
+    <footer class="footer">&copy; 2026 Dashboard Grid — Latihan CSS Grid</footer>
+
+  </div>
+
+</body>
+</html>
