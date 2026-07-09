@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variabel & Tipe Data JavaScript</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      padding: 32px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 32px;
+      font-size: 0.9rem;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .section h2 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      background: #3498db;
+      color: #fff;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    button.secondary {
+      background: #95a5a6;
+    }
+
+    button.secondary:hover {
+      background: #7f8c8d;
+    }
+
+    #output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      min-height: 60px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Variabel & Tipe Data JavaScript</h1>
+  <p class="subtitle">Klik tombol di bawah untuk melihat demonstrasi</p>
+
+  <!-- Deklarasi Variabel -->
+  <div class="section">
+    <h2>1. Deklarasi Variabel: let vs const vs var</h2>
+    <div class="btn-group">
+      <button onclick="demoLet()">Demo let</button>
+      <button onclick="demoConst()">Demo const</button>
+      <button onclick="demoVar()">Demo var</button>
+    </div>
+  </div>
+
+  <!-- Tipe Data -->
+  <div class="section">
+    <h2>2. Tipe Data</h2>
+    <div class="btn-group">
+      <button onclick="demoString()">String</button>
+      <button onclick="demoNumber()">Number</button>
+      <button onclick="demoBoolean()">Boolean</button>
+      <button onclick="demoUndefined()">Undefined</button>
+      <button onclick="demoNull()">Null</button>
+      <button onclick="demoBigInt()">BigInt</button>
+      <button onclick="demoSymbol()">Symbol</button>
+    </div>
+  </div>
+
+  <!-- Operator Aritmatika -->
+  <div class="section">
+    <h2>3. Operator Aritmatika</h2>
+    <div class="btn-group">
+      <button onclick="demoAritmatika()">Jalankan Semua</button>
+    </div>
+  </div>
+
+  <!-- Operator Perbandingan -->
+  <div class="section">
+    <h2>4. Operator Perbandingan (== vs ===)</h2>
+    <div class="btn-group">
+      <button onclick="demoPerbandingan()">Jalankan Perbandingan</button>
+    </div>
+  </div>
+
+  <!-- Operator Logika -->
+  <div class="section">
+    <h2>5. Operator Logika</h2>
+    <div class="btn-group">
+      <button onclick="demoLogika()">Jalankan Logika</button>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div class="section">
+    <h2>Hasil</h2>
+    <div id="output">Klik salah satu tombol di atas...</div>
+  </div>
+
+  <script>
+    var output = document.getElementById('output');
+
+    function log(teks) {
+      output.textContent += teks + '\n';
+    }
+
+    function bersihkan() {
+      output.textContent = '';
+    }
+
+    // ---- 1. Deklarasi Variabel ----
+    function demoLet() {
+      bersihkan();
+      log('// let — block-scoped, bisa di-assign ulang');
+      var x = 10;
+      log('let x = 10;  → ' + x);
+      x = 20;
+      log('x = 20;       → ' + x);
+      log('typeof x      → ' + typeof x);
+    }
+
+    function demoConst() {
+      bersihkan();
+      log('// const — block-scoped, tidak bisa di-assign ulang');
+      var PI = 3.14159;
+      log('const PI = 3.14159; → ' + PI);
+      log('typeof PI            → ' + typeof PI);
+      log('// PI = 3; akan menghasilkan TypeError');
+    }
+
+    function demoVar() {
+      bersihkan();
+      log('// var — function-scoped, bisa di-assign ulang');
+      var nama = 'Budi';
+      log('var nama = "Budi"; → ' + nama);
+      nama = 'Andi';
+      log('nama = "Andi";     → ' + nama);
+      log('typeof nama        → ' + typeof nama);
+    }
+
+    // ---- 2. Tipe Data ----
+    function demoString() {
+      bersihkan();
+      var teks = 'Halo Dunia';
+      var template = 'Template literal: 1 + 1 = ' + (1 + 1);
+      log('let teks = "Halo Dunia";');
+      log('teks           → ' + teks);
+      log('typeof teks    → ' + typeof teks);
+      log('teks.length    → ' + teks.length);
+      log('teks.toUpperCase() → ' + teks.toUpperCase());
+      log(template);
+    }
+
+    function demoNumber() {
+      bersihkan();
+      var bulat = 42;
+      var desimal = 3.14;
+      var infinity = 1 / 0;
+      var nan = 'abc' * 2;
+      log('let bulat = 42;           → ' + bulat);
+      log('typeof bulat              → ' + typeof bulat);
+      log('let desimal = 3.14;       → ' + desimal);
+      log('1 / 0                     → ' + infinity);
+      log('"abc" * 2                 → ' + nan);
+      log('isNaN("abc" * 2)          → ' + isNaN(nan));
+    }
+
+    function demoBoolean() {
+      bersihkan();
+      var benar = true;
+      var salah = false;
+      log('let benar = true;        → ' + benar);
+      log('typeof benar             → ' + typeof benar);
+      log('10 > 5                   → ' + (10 > 5));
+      log('10 < 5                   → ' + (10 < 5));
+      log('Boolean("")              → ' + Boolean(''));
+      log('Boolean("halo")          → ' + Boolean('halo'));
+    }
+
+    function demoUndefined() {
+      bersihkan();
+      var kosong;
+      log('let kosong;              → ' + kosong);
+      log('typeof kosong            → ' + typeof kosong);
+      log('kosong === undefined     → ' + (kosong === undefined));
+    }
+
+    function demoNull() {
+      bersihkan();
+      var nol = null;
+      log('let nol = null;          → ' + nol);
+      log('typeof null              → ' + typeof nol + '  (quirk JS!)');
+      log('nol === null             → ' + (nol === null));
+      log('null == undefined        → ' + (null == undefined));
+      log('null === undefined       → ' + (null === undefined));
+    }
+
+    function demoBigInt() {
+      bersihkan();
+      var besar = 9007199254740991n;
+      log('let besar = 9007199254740991n;');
+      log('besar                    → ' + besar);
+      log('typeof besar             → ' + typeof besar);
+      log('besar + 1n               → ' + (besar + 1n));
+    }
+
+    function demoSymbol() {
+      bersihkan();
+      var s1 = Symbol('id');
+      var s2 = Symbol('id');
+      log('let s1 = Symbol("id");');
+      log('let s2 = Symbol("id");');
+      log('s1.toString()           → ' + s1.toString());
+      log('typeof s1               → ' + typeof s1);
+      log('s1 === s2               → ' + (s1 === s2) + '  (selalu unik!)');
+    }
+
+    // ---- 3. Operator Aritmatika ----
+    function demoAritmatika() {
+      bersihkan();
+      var a = 10;
+      var b = 3;
+      log('let a = 10, b = 3;');
+      log('a + b   = ' + (a + b));
+      log('a - b   = ' + (a - b));
+      log('a * b   = ' + (a * b));
+      log('a / b   = ' + (a / b));
+      log('a % b   = ' + (a % b) + '  (modulus/sisa bagi)');
+      log('a ** b  = ' + (a ** b) + '  (pangkat)');
+      log('a++     = ' + (a++) + '  (setelah: ' + a + ')');
+      log('--a     = ' + (--a));
+      log('a += 5  → ' + (b + 5) + '  (a = a + 5)');
+    }
+
+    // ---- 4. Operator Perbandingan ----
+    function demoPerbandingan() {
+      bersihkan();
+      log('// ==  vs  ===');
+      log('5 == "5"    → ' + (5 == '5') + '   (loose, konversi tipe)');
+      log('5 === "5"   → ' + (5 === '5') + '  (strict, tipe berbeda)');
+      log('0 == false  → ' + (0 == false) + '   (loose)');
+      log('0 === false → ' + (0 === false) + '  (strict)');
+      log('');
+      log('// !=  vs  !==');
+      log('5 != "5"    → ' + (5 != '5') + '  (loose)');
+      log('5 !== "5"   → ' + (5 !== '5') + '  (strict)');
+      log('');
+      log('// >, <, >=, <=');
+      log('10 > 5      → ' + (10 > 5));
+      log('10 <= 10    → ' + (10 <= 10));
+    }
+
+    // ---- 5. Operator Logika ----
+    function demoLogika() {
+      bersihkan();
+      log('// AND (&&) — kedua sisi harus true');
+      log('true && true   → ' + (true && true));
+      log('true && false  → ' + (true && false));
+      log('(5 > 3) && (10 > 5) → ' + ((5 > 3) && (10 > 5)));
+      log('');
+      log('// OR (||) — salah satu true maka true');
+      log('true || false  → ' + (true || false));
+      log('false || false → ' + (false || false));
+      log('');
+      log('// NOT (!) — membalik nilai');
+      log('!true          → ' + (!true));
+      log('!false         → ' + (!false));
+      log('!(5 > 10)      → ' + (!(5 > 10)));
+      log('');
+      log('// Short-circuit evaluation');
+      log('\'halo\' && \'dunia\'  → ' + ('halo' && 'dunia'));
+      log('null || \'default\'   → ' + (null || 'default'));
+    }
+  </script>
+
+</body>
+</html>

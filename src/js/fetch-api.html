@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch API — JSONPlaceholder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      padding: 32px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    button {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      background: #3498db;
+      color: #fff;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 24px;
+      font-size: 1.1rem;
+      color: #888;
+      display: none;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #ccc;
+      border-top-color: #3498db;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error {
+      text-align: center;
+      padding: 16px;
+      background: #ffeaea;
+      color: #c0392b;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .card-id {
+      display: inline-block;
+      background: #3498db;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      line-height: 1.4;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Fetch API</h1>
+  <p class="subtitle">Mengambil data dari JSONPlaceholder API</p>
+
+  <div class="controls">
+    <button onclick="fetchPosts()">Refresh Data</button>
+  </div>
+
+  <div class="loading" id="loading">
+    <span class="spinner"></span> Loading...
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <div class="cards-container" id="cardsContainer"></div>
+
+  <script>
+    var API_URL = 'https://jsonplaceholder.typicode.com/posts';
+
+    async function fetchPosts() {
+      var container = document.getElementById('cardsContainer');
+      var loading = document.getElementById('loading');
+      var errorEl = document.getElementById('error');
+
+      // Tampilkan loading, sembunyikan error dan konten lama
+      loading.classList.add('visible');
+      errorEl.classList.remove('visible');
+      errorEl.textContent = '';
+      container.innerHTML = '';
+
+      try {
+        var response = await fetch(API_URL);
+
+        if (!response.ok) {
+          throw new Error('HTTP Error: ' + response.status);
+        }
+
+        var posts = await response.json();
+
+        // Ambil 5 post pertama
+        var limaPost = posts.slice(0, 5);
+
+        limaPost.forEach(function (post) {
+          var card = document.createElement('div');
+          card.className = 'card';
+
+          card.innerHTML =
+            '<span class="card-id">Post #' + post.id + '</span>' +
+            '<h3>' + post.title + '</h3>' +
+            '<p>' + post.body + '</p>';
+
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        errorEl.textContent = 'Gagal mengambil data: ' + err.message;
+        errorEl.classList.add('visible');
+      } finally {
+        loading.classList.remove('visible');
+      }
+    }
+
+    // Muat data pertama kali
+    fetchPosts();
+  </script>
+
+</body>
+</html>

@@ -170,3 +170,124 @@ Digunakan seperti format kamus: Term (istilah) dan Deskripsinya.
     <dd style="margin-left: 1.5rem;">Bahasa penata gaya untuk mempercantik web.</dd>
   </dl>
 </div>
+
+---
+
+## HTML Entities (Karakter Spesial)
+
+Beberapa karakter seperti `<`, `>`, dan `&` memiliki arti khusus di HTML. Jika Anda mengetikkannya langsung di kode, browser akan mengira itu adalah tag atau instruksi HTML, bukan teks biasa. Solusinya: **HTML Entities** — kode khusus yang dirender menjadi karakter yang Anda inginkan.
+
+**Analogi:** Seperti "kata sandi" di dunia spionase. Agen menyebut "The Eagle has landed" yang artinya "Operasi dimulai". HTML Entities adalah kode sandi yang diterjemahkan browser menjadi karakter asli.
+
+| Entity | Karakter | Kegunaan |
+|--------|----------|----------|
+| `&amp;` | `&` | Ampersand — wajib digunakan di URL dan atribut |
+| `&lt;` | `<` | Less-than / Kurang dari — menampilkan tag HTML sebagai teks |
+| `&gt;` | `>` | Greater-than / Lebih dari |
+| `&quot;` | `"` | Tanda petik ganda — berguna di dalam atribut HTML |
+| `&nbsp;` | spasi tak terputus | Non-Breaking Space — spasi yang tidak akan dipotong ke baris baru |
+| `&copy;` | © | Copyright / Hak Cipta |
+| `&reg;` | ® | Registered Trademark |
+| `&trade;` | ™ | Trademark |
+
+```html
+<p>Gunakan &lt;h1&gt; untuk judul utama, bukan &lt;div&gt;.</p>
+<p>Hak cipta &copy; 2026 oleh PT Maju Jaya &amp; Co.</p>
+<p>Harga: Rp&nbsp;10.000&nbsp;(diskon 50%) &mdash; jangan sampai ketinggalan!</p>
+```
+<div class="preview-box">
+  <p style="margin-top:0;">Gunakan &lt;h1&gt; untuk judul utama, bukan &lt;div&gt;.</p>
+  <p>Hak cipta &copy; 2026 oleh PT Maju Jaya &amp; Co.</p>
+  <p>Harga: Rp&nbsp;10.000&nbsp;(diskon 50%) &mdash; jangan sampai ketinggalan!</p>
+</div>
+
+### 💡 Tips Praktis:
+- **Non-Breaking Space (`&nbsp;`)** sangat berguna untuk mencegah "yatim piatu tipografi" — misalnya, mencegah angka `10.000` terpisah dari satuan `Rp` saat baris teks terpotong.
+- Gunakan `&lt;` dan `&gt;` setiap kali Anda menampilkan kode HTML di dalam konten (seperti yang dilakukan dokumen ini!).
+
+---
+
+## Inline Semantic Tags Tambahan
+
+Selain `<strong>`, `<em>`, dan `<mark>` yang sudah kita bahas, HTML menyediakan beragam tag inline lain yang memberi **makna spesifik** pada potongan teks:
+
+### `<time datetime="...">`
+Menandai teks sebagai tanggal/waktu yang bisa dibaca mesin. Atribut `datetime` berisi format ISO (YYYY-MM-DD) yang dipahami oleh kalender, asisten virtual, dan search engine.
+
+### `<abbr title="...">`
+Menandai singkatan (*Abbreviation* atau *Acronym*). Browser menampilkan tooltip berisi kepanjangan saat kursor diarahkan.
+
+### `<code>`
+Menandai potongan kode komputer (*inline code*). Dirender dengan font monospace.
+
+### `<kbd>`
+Menandai input keyboard. Dirender dengan font monospace dan sering distyling seperti tombol fisik.
+
+### `<sub>` dan `<sup>`
+Subscript (teks di bawah garis normal) dan Superscript (teks di atas garis normal). Berguna untuk rumus kimia (`H₂O`) dan pangkat matematika (`x²`).
+
+### `<small>`
+Menandai teks "fine print" — catatan kaki, disclaimer, atau informasi hak cipta (ukuran lebih kecil).
+
+### `<var>`
+Menandai variabel dalam konteks matematika atau pemrograman. Dirender miring.
+
+### `<samp>`
+Menandai *sample output* dari program komputer. Dirender dengan font monospace.
+
+```html
+<p>Workshop dimulai pada <time datetime="2026-08-15">15 Agustus 2026</time>.</p>
+<p>Teknologi <abbr title="HyperText Markup Language">HTML</abbr> adalah fondasi web modern.</p>
+<p>Gunakan tag <code>&lt;section&gt;</code> untuk membagi konten.</p>
+<p>Tekan <kbd>Ctrl</kbd> + <kbd>S</kbd> untuk menyimpan dokumen.</p>
+<p>Rumus kimia air: H<sub>2</sub>O. Rumus luas persegi: x<sup>2</sup>.</p>
+<p><small>&copy; 2026 PT Maju Jaya. Seluruh hak cipta dilindungi undang-undang.</small></p>
+<p>Variabel <var>totalHarga</var> menyimpan hasil kalkulasi yang ditampilkan sebagai <samp>Rp 150.000</samp>.</p>
+```
+<div class="preview-box">
+  <p style="margin-top:0;">Workshop dimulai pada <time datetime="2026-08-15">15 Agustus 2026</time>.</p>
+  <p>Teknologi <abbr title="HyperText Markup Language" style="text-decoration: underline dotted; cursor: help;">HTML</abbr> adalah fondasi web modern.</p>
+  <p>Gunakan tag <code style="background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace;">&lt;section&gt;</code> untuk membagi konten.</p>
+  <p>Tekan <kbd style="background: #eee; border: 1px solid #aaa; border-radius: 3px; padding: 2px 6px; font-family: monospace; box-shadow: 0 1px 0 #aaa;">Ctrl</kbd> + <kbd style="background: #eee; border: 1px solid #aaa; border-radius: 3px; padding: 2px 6px; font-family: monospace; box-shadow: 0 1px 0 #aaa;">S</kbd> untuk menyimpan dokumen.</p>
+  <p>Rumus kimia air: H<sub>2</sub>O. Rumus luas persegi: x<sup>2</sup>.</p>
+  <p><small>&copy; 2026 PT Maju Jaya. Seluruh hak cipta dilindungi undang-undang.</small></p>
+  <p>Variabel <var style="font-style: italic;">totalHarga</var> menyimpan hasil kalkulasi yang ditampilkan sebagai <samp style="font-family: monospace; background: #f4f4f4; padding: 2px 4px;">Rp 150.000</samp>.</p>
+</div>
+
+---
+
+## `<details>` dan `<summary>` — Widget Accordion Native
+
+Pernah melihat widget **"Baca Selengkapnya"** atau **FAQ Accordion** yang mengembang (expand) saat diklik? Dulu butuh JavaScript, sekarang bisa pakai HTML murni.
+
+- **`<details>`**: Wadah widget accordion. Secara default dalam keadaan tertutup (*collapsed*).
+- **`<summary>`**: Judul yang selalu terlihat — pengguna klik ini untuk membuka/menutup isi.
+
+**Analogi:** Seperti amplop surat. `<summary>` adalah tulisan di luar amplop yang selalu bisa dibaca. Isi surat di dalam amplop (`<details>` di luar `<summary>`) hanya terlihat setelah amplop dibuka.
+
+```html
+<details>
+  <summary>Apa itu Semantic HTML?</summary>
+  <p>Semantic HTML adalah praktik menggunakan elemen HTML yang mendeskripsikan makna kontennya, bukan hanya tampilan visualnya. Contoh: <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code>.</p>
+</details>
+
+<details open>
+  <summary>Mengapa website saya harus responsif? (Sudah terbuka)</summary>
+  <p>Karena lebih dari 60% pengguna internet mengakses web melalui smartphone. Google juga memberikan peringkat lebih tinggi untuk website yang mobile-friendly.</p>
+</details>
+```
+<div class="preview-box">
+  <details style="margin-bottom: 1rem;">
+    <summary style="cursor: pointer; font-weight: bold; padding: 0.5rem 0; color: var(--vp-c-brand);">Apa itu Semantic HTML?</summary>
+    <p style="margin-top: 0.5rem; padding-left: 1rem; border-left: 3px solid var(--vp-c-divider);">Semantic HTML adalah praktik menggunakan elemen HTML yang mendeskripsikan makna kontennya, bukan hanya tampilan visualnya. Contoh: <code style="background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace;">&lt;article&gt;</code>, <code style="background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace;">&lt;nav&gt;</code>, <code style="background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace;">&lt;header&gt;</code>.</p>
+  </details>
+  <details open>
+    <summary style="cursor: pointer; font-weight: bold; padding: 0.5rem 0; color: var(--vp-c-brand);">Mengapa website saya harus responsif? (Sudah terbuka)</summary>
+    <p style="margin-top: 0.5rem; padding-left: 1rem; border-left: 3px solid var(--vp-c-divider);">Karena lebih dari 60% pengguna internet mengakses web melalui smartphone. Google juga memberikan peringkat lebih tinggi untuk website yang mobile-friendly.</p>
+  </details>
+</div>
+
+### 💡 Tips Praktis:
+- Gunakan atribut `open` pada `<details>` jika Anda ingin accordion terbuka secara default.
+- `<details>` bisa di-*nesting* (ditaruh di dalam `<details>` lain) untuk membuat FAQ bertingkat.
+- Tidak perlu JavaScript sama sekali — tetapi Anda bisa menambahkan animasi buka/tutup dengan CSS `::details-content` (masih experimental).

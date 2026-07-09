@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Box Model CSS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      padding: 40px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .deskripsi {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .kotak-wrapper {
+      text-align: center;
+    }
+
+    .kotak-wrapper h2 {
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+
+    .kotak {
+      width: 200px;
+      height: 200px;
+      padding: 20px;
+      border: 5px solid;
+      margin: 20px;
+      background-color: #e8f4fd;
+      border-color: #2980b9;
+      display: inline-block;
+    }
+
+    .content-box {
+      box-sizing: content-box;
+    }
+
+    .border-box {
+      box-sizing: border-box;
+    }
+
+    .dimensi {
+      margin-top: 16px;
+      padding: 12px;
+      background: #fff;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      display: inline-block;
+      text-align: left;
+    }
+
+    .dimensi span {
+      font-weight: bold;
+      color: #2980b9;
+    }
+
+    .penjelasan {
+      max-width: 650px;
+      margin: 40px auto 0;
+      padding: 24px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      line-height: 1.8;
+    }
+
+    .penjelasan h2 {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+
+    .penjelasan code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Demo Box Model CSS</h1>
+  <p class="deskripsi">Perbandingan <code>box-sizing: content-box</code> vs <code>box-sizing: border-box</code></p>
+
+  <div class="container">
+
+    <!-- Kotak dengan content-box (default) -->
+    <div class="kotak-wrapper">
+      <h2>content-box (default)</h2>
+      <div class="kotak content-box"></div>
+      <div class="dimensi">
+        <strong>Dimensi Total:</strong><br>
+        Lebar konten: <span>200px</span><br>
+        + padding (kiri+kanan): <span>40px</span><br>
+        + border (kiri+kanan): <span>10px</span><br>
+        = <span>250px</span> total lebar elemen<br>
+        ➕ Margin (kiri+kanan): 40px
+      </div>
+    </div>
+
+    <!-- Kotak dengan border-box -->
+    <div class="kotak-wrapper">
+      <h2>border-box</h2>
+      <div class="kotak border-box"></div>
+      <div class="dimensi">
+        <strong>Dimensi Total:</strong><br>
+        Lebar total elemen: <span>200px</span><br>
+        (padding dan border sudah <em>termasuk</em>)<br>
+        ➕ Margin (kiri+kanan): 40px<br><br>
+        Lebar konten tersisa:<br>
+        200 − 40(padding) − 10(border) = <span>150px</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="penjelasan">
+    <h2>Kesimpulan</h2>
+    <p>
+      Kedua kotak di atas memiliki properti yang sama: <code>width: 200px; padding: 20px; border: 5px solid; margin: 20px;</code>.
+      Perbedaannya hanya pada <code>box-sizing</code>.
+    </p>
+    <p>
+      <strong><code>content-box</code></strong> — lebar <code>200px</code> hanya untuk <em>konten</em>. Padding dan border <strong>ditambahkan</strong> di luar sehingga total lebar elemen menjadi <strong>250px</strong>.
+    </p>
+    <p>
+      <strong><code>border-box</code></strong> — lebar <code>200px</code> sudah <strong>mencakup</strong> konten, padding, dan border. Sehingga ukuran elemen tetap <strong>200px</strong> dan lebih mudah diprediksi.
+    </p>
+  </div>
+
+</body>
+</html>

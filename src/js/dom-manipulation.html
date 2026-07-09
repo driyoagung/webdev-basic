@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Manipulation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      padding: 32px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Dark mode */
+    body.dark-mode {
+      background: #1a1a2e;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .section {
+      background: #16213e;
+      color: #ddd;
+    }
+
+    body.dark-mode input {
+      background: #0f3460;
+      color: #eee;
+      border-color: #1a1a4e;
+    }
+
+    body.dark-mode li {
+      background: #0f3460;
+    }
+
+    body.dark-mode button.secondary {
+      background: #444;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .section h2 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+
+    body.dark-mode .section h2 {
+      color: #b0c4de;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    button {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      background: #3498db;
+      color: #fff;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    button.secondary {
+      background: #95a5a6;
+    }
+
+    button.secondary:hover {
+      background: #7f8c8d;
+    }
+
+    button.danger {
+      background: #e74c3c;
+    }
+
+    button.danger:hover {
+      background: #c0392b;
+    }
+
+    button.success {
+      background: #27ae60;
+    }
+
+    button.success:hover {
+      background: #219a52;
+    }
+
+    /* List item */
+    ul#itemList {
+      list-style: none;
+      margin-top: 12px;
+    }
+
+    ul#itemList li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: #f1f3f5;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .btn-sm {
+      padding: 4px 12px;
+      font-size: 0.78rem;
+    }
+
+    /* Counter */
+    .counter-display {
+      font-size: 2rem;
+      font-weight: 700;
+      min-width: 60px;
+      text-align: center;
+      padding: 0 8px;
+    }
+
+    /* Target ganti warna */
+    .target-box {
+      width: 100%;
+      height: 120px;
+      border-radius: 8px;
+      margin-top: 12px;
+      background: #e8e8e8;
+      transition: background-color 0.4s;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>DOM Manipulation</h1>
+
+  <!-- 1. Tambah / Hapus Item List -->
+  <div class="section">
+    <h2>1. Tambah Item ke Daftar</h2>
+    <div class="row">
+      <input type="text" id="itemInput" placeholder="Ketik nama item..." />
+      <button onclick="tambahItem()">Tambah Item</button>
+    </div>
+    <ul id="itemList"></ul>
+  </div>
+
+  <!-- 2. Dark Mode -->
+  <div class="section">
+    <h2>2. Toggle Dark Mode</h2>
+    <div class="row">
+      <button id="btnDarkMode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+  </div>
+
+  <!-- 3. Counter -->
+  <div class="section">
+    <h2>3. Counter</h2>
+    <div class="row">
+      <button onclick="ubahCounter(-1)" class="danger">−</button>
+      <span class="counter-display" id="counterDisplay">0</span>
+      <button onclick="ubahCounter(1)" class="success">+</button>
+    </div>
+  </div>
+
+  <!-- 4. Ganti Warna Random -->
+  <div class="section">
+    <h2>4. Ganti Warna Random</h2>
+    <div class="row">
+      <button onclick="gantiWarnaRandom()">Ganti Warna Random</button>
+    </div>
+    <div class="target-box" id="targetBox"></div>
+  </div>
+
+  <script>
+    // ---- 1. Tambah Item ----
+    function tambahItem() {
+      var input = document.getElementById('itemInput');
+      var teks = input.value.trim();
+
+      if (teks === '') {
+        alert('Harap isi teks item terlebih dahulu!');
+        return;
+      }
+
+      var li = document.createElement('li');
+      li.innerHTML = '<span>' + teks + '</span>';
+
+      var btnHapus = document.createElement('button');
+      btnHapus.textContent = 'Hapus';
+      btnHapus.className = 'danger btn-sm';
+      btnHapus.onclick = function () {
+        li.remove();
+      };
+
+      li.appendChild(btnHapus);
+      document.getElementById('itemList').appendChild(li);
+      input.value = '';
+      input.focus();
+    }
+
+    // Izinkan tekan Enter untuk tambah item
+    document.getElementById('itemInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        tambahItem();
+      }
+    });
+
+    // ---- 2. Toggle Dark Mode ----
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      var isDark = document.body.classList.contains('dark-mode');
+      document.getElementById('btnDarkMode').textContent =
+        isDark ? 'Mode Terang' : 'Toggle Dark Mode';
+    }
+
+    // ---- 3. Counter ----
+    var counter = 0;
+
+    function ubahCounter(delta) {
+      counter += delta;
+      document.getElementById('counterDisplay').textContent = counter;
+    }
+
+    // ---- 4. Ganti Warna Random ----
+    function gantiWarnaRandom() {
+      var r = Math.floor(Math.random() * 256);
+      var g = Math.floor(Math.random() * 256);
+      var b = Math.floor(Math.random() * 256);
+      var warna = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+      document.getElementById('targetBox').style.backgroundColor = warna;
+    }
+  </script>
+
+</body>
+</html>
