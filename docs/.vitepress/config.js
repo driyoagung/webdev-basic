@@ -2,6 +2,31 @@ export default {
   title: 'Web Dev Basic',
   description: 'Dokumentasi dan Contoh Kode untuk Belajar Web Development Dasar',
   themeConfig: {
+    search: {
+      provider: 'local',
+      options: {
+        translations: {
+          button: {
+            buttonText: 'Cari materi',
+            buttonAriaLabel: 'Cari materi'
+          },
+          modal: {
+            displayDetails: 'Tampilkan detail hasil',
+            resetButtonTitle: 'Hapus pencarian',
+            backButtonTitle: 'Tutup',
+            noResultsText: 'Tidak ada hasil untuk',
+            footer: {
+              selectText: 'untuk pilih',
+              navigateText: 'untuk navigasi',
+              navigateUpKeyAriaLabel: 'Panah atas',
+              navigateDownKeyAriaLabel: 'Panah bawah',
+              closeKeyAriaLabel: 'Tutup',
+              closeText: 'untuk menutup'
+            }
+          }
+        }
+      }
+    },
     nav: [
       { text: '🏠 Home', link: '/' },
       { text: '🌐 HTML', link: '/html/' },
