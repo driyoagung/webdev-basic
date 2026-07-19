@@ -329,6 +329,287 @@ npm run format
 
 ---
 
+## Semver — Membaca Versi & Simbol `^` `~`
+
+Versi paket mengikuti standar **Semver** (Semantic Versioning): `MAJOR.MINOR.PATCH`.
+
+- `MAJOR` (1.x.x) — perubahan **breaking** (migrasi manual)
+- `MINOR` (x.1.x) — fitur baru **backward-compatible**
+- `PATCH` (x.x.1) — bug fix **backward-compatible**
+
+Contoh: `1.4.2 → 1.4.3` (patch), `1.4.2 → 1.5.0` (minor), `1.4.2 → 2.0.0` (major breaking).
+
+### Simbol di `package.json`
+
+```json
+{
+  "dependencies": {
+    "axios": "^1.6.0",    // caret: ≥1.6.0 <2.0.0   (patch + minor, bukan major)
+    "lodash": "~4.17.20", // tilde: ≥4.17.20 <4.18.0 (patch saja)
+    "react": "18.2.0",     // exact: HANYA 18.2.0
+    "vue": "*"             // any version (jangan!)
+  }
+}
+```
+
+| Simbol | Range diizinkan | Cocok untuk |
+|---|---|---|
+| `^1.6.0` (caret) | Patch & minor → aman untuk fitur non-breaking | Default NPM, mayoritas paket |
+| `~1.6.0` (tilde) | Hanya patch → sangat konservatif | Library kritis, tak boleh rusak |
+| `1.6.0` (exact) | Versi persis | CI, monorepo, paket dengan riwayat breaking sering |
+
+```bash
+# Update ke minor/patch tertinggi yang kompatibel
+npm update axios
+
+# Update ke versi eksak (ubah package.json)
+npm install axios@1.8.0
+
+# Lihat versi tersedia
+npm view axios versions
+```
+
+::: tip Mengapa `npm install` kadang "tiba-tiba rusak"?
+Karena `^` mengizinkan update minor, `npm install` di mesin baru bisa dapat versi lebih baru → ada bug. Maka penting commit `package-lock.json` agar versi eksak terkunci.
+:::
+
+---
+
+## `package-lock.json` & `npm ci`
+
+`package-lock.json` adalah file yang **menyimpan versi eksak dari semua dependency** (termasuk sub-dependency) beserta hash-nya. Tujuannya:
+
+- Hasil instalasi **reproduksibel** di mesin lain / CI → komitabel
+- Mencegah *dependency drift* antar anggota tim
+- Deteksi *supply chain attack* (hash mismatch)
+
+```bash
+npm install             # baca package.json → tulis/update lockfile kalaur perlu
+npm ci                  # (clean install) hapus node_modules, install EKSAK dari lockfile
+                        # wajib ada package-lock.json, tidak akan mengubahnya
+                        # lebih cepat & deterministik → ideal untuk CI
+```
+
+::: tip
+- Selalu commit `package-lock.json` (NPM) / `yarn.lock` (Yarn) / `pnpm-lock.yaml` (pnpm).
+- Hapus `node_modules/` dan jalankan `npm ci` kalau repo Anda "rusak aneh" — sering kali install ulang dari lock menyelesaikannya.
+:::
+
+---
+
+## Alternatif Package Manager: pnpm & Yarn
+
+NPM adalah default, tetapi banyak tim/product pick lain:
+
+| Package Manager | Ciri khas | Kelebihan |
+|---|---|---|
+| **NPM** | Default Node | Paling universal, dukungan docs terbanyak |
+| **pnpm** | Symlink + store global | Hemat disk (1 copy per versi), install paralel super cepat, strict (no phantom deps) |
+| **Yarn (v4)** | Zero-install, PnP | Cepat, offline-first, workspaces bawaan |
+| **Bun** | All-in-one (runtime + pkg + bundler) | Performa ekstrem (native code) |
+
+Pemula disarankan pakai NPM dulu — dokumentasi proyek open source paling sering pakai NPM. Beralih ke pnpm saat Anda mulai merasa NPM lambat di monorepo.
+
+Perintah setara:
+
+| Aksi | NPM | pnpm | Yarn |
+|---|---|---|---|
+| Install all | `npm install` | `pnpm install` | `yarn` |
+| Tambah paket | `npm i axios` | `pnpm add axios` | `yarn add axios` |
+| Run script | `npm run dev` | `pnpm dev` | `yarn dev` |
+| Exec binary | `npx vite` | `pnpm dlx vite` / `pnpm exec vite` | `yarn dlx vite` |
+
+---
+
+## `nvm` — Mengelola Banyak Versi Node
+
+Proyek A butuh Node 18, proyek B butuh Node 20, dan Anda beralih bolak-balik. Pasang [**nvm**](https://github.com/nvm-sh/nvm) (Linux/Mac/WSL) atau [**fnm**](https://github.com/Schniz/fnm) / [**Volta**](https://volta.sh) (Windows).
+
+```bash
+nvm install 20            # install Node 20
+nvm use 20                # ganti ke Node 20 untuk shell ini
+nvm ls                    # daftar versi terinstall
+nvm alias default 20      # jadikan default saat buka terminal baru
+```
+
+Tip: tambah file `.nvmrc` di root proyek berisi `20`, lalu `nvm use` otomatis pakai versi itu.
+
+```bash
+# .nvmrc
+20
+```
+
+```bash
+# di PowerShell / shell
+nvm use          # baca .nvmrc → switch
+```
+
+::: tip Windows
+`nvm-windows` adalah port terpisah (orang berbeda). fnm lebih aktif & cross-platform. Volta paling "zero-config" (auto-switch berdasar folder).
+:::
+
+---
+
+## TypeScript — Static Typing untuk JavaScript
+
+**TypeScript (TS)** adalah superset JavaScript yang menambahkan **tipe statis**. Kode TS tidak langsung berjalan di browser — ia di-*compile* (transpile) menjadi JavaScript biasa.
+
+Mengapa industri beralih:
+- Catch bug saat *development* (sebelum `npm run build`) — variabel typo, typo properti object, lupa kasih argumen
+- Editor autocomplete jauh lebih cerdas ( IntelliSense tahu bentuk objek dari API/library)
+- Self-documented: tipe = dokumentasi yang tidak bisa outdated
+
+```ts
+// TypeScript                          // JavaScript equivalent
+function tambah(a: number, b: number): number {
+  return a + b;
+}
+
+interface User {
+  id: number;
+  nama: string;
+  email?: string;                    // ? = optional
+}
+
+const user: User = { id: 1, nama: "Budi" };
+//                               ^^^ TS langsung merah kalau lupa field wajib
+```
+
+Saat ini hampir semua proyek produksi (Vercel, GitHub, Microsoft, dll) pakai TypeScript. Bahkan framework like Next.js, Nuxt, SvelteKit default-nya TS. Vite & Vitest mendukung `.ts` out of the box — tinggal `npm install -D typescript`.
+
+Setup minimal:
+```bash
+npm install -D typescript
+npx tsc --init              # buat tsconfig.json
+```
+
+::: tip Mulai bertahap
+Tidak perlu migrasi semua file ke TS sekaligus. Sebagian proyek hybrid: file lama `.js`, file baru `.ts`. TS bisa menampung keduanya. Atau pakai **JSDoc** type annotations (`/** @param {number} a */`) — dapat manfaat IDE tanpa migrasi.
+:::
+
+---
+
+## Husky + lint-staged — Pre-commit Hook Praktis
+
+Tips §5 mengatakan "format sebelum commit, atau pakai pre-commit hook". Sekarang kita wujudkan dengan **Husky** (manage Git hooks) + **lint-staged** (run command only pada file yang di-stage).
+
+```bash
+# Setup satu kali per proyek
+npm install -D husky lint-staged
+npx husky init                    # buat .husky/ + .husky/pre-commit sample
+
+# Custom pre-commit
+echo "npx lint-staged" > .husky/pre-commit
+chmod +x .husky/pre-commit        # Windows skip (Husky handle)
+```
+
+Tambah config `lint-staged` di `package.json`:
+```json
+{
+  "lint-staged": {
+    "*.{js,ts}":  ["eslint --fix", "prettier --write"],
+    "*.{css,html,json,md}": ["prettier --write"]
+  }
+}
+```
+
+Sekarang setiap `git commit` hanya memformat file yang Anda stage — bukan seluruh repo. Cepat & aman. Lalu tambahkan **commit-msg hook** untuk enforce [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, dll):
+
+```bash
+echo "npx --no-install commitlint --edit \$1" > .husky/commit-msg
+```
+
+---
+
+## `.env` — Environment Variables yang Aman
+
+File `.env` menyimpan **konfigurasi** per-environment (dev/staging/prod): API endpoint, token, fitur flag. Wajib di-`.gitignore`!
+
+```bash
+# .env
+VITE_API_URL=https://api.example.com
+VITE_GA_ID=G-XXXXXXXX
+DATABASE_URL=postgres://user:pass@db:5432/app          # server-side only
+```
+
+Cara baca di kode (Vite):
+```js
+// Hanya variabel berawalan VITE_ yang diekspos ke client
+const apiUrl = import.meta.env.VITE_API_URL;
+```
+
+Untuk Node.js murni (yang tidak punya `import.meta.env`):
+```bash
+npm install dotenv
+```
+```js
+import "dotenv/config";                 // load .env ke process.env
+console.log(process.env.DATABASE_URL);
+```
+
+::: warning
+Variabel yang berawalan `VITE_` atau `NEXT_PUBLIC_` **di-bundle ke file JS** dan bisa dilihat user di DevTools. Jangan taruh secret server di sana. Token sens-itif harus tinggal di backend dan diakses lewat API.
+:::
+
+Untuk CI/CD (GitHub Actions, Vercel), variabel env disimpan lewat UI panel, bukan file. Lalu diakses dalam workflow GitHub Actions lewat sintaks `secrets.API_KEY` (lihat dokumentasi GitHub untuk sintaks lengkap).
+
+---
+
+## Debugging JavaScript di VS Code
+
+Kapan pakai debugger (lebih powerful dari `console.log`)? Saat bug kompleks, Redux state aneh, atau ingin inspeksi call stack lengkap.
+
+### Debug Node.js / Vite SSR
+1. Buka file JS/TS
+2. Beralih ke panel **Run and Debug** (Ctrl+Shift+D)
+3. Klik **create a launch.json file** → pilih **Node.js**
+4. Tambah breakpoint (klik kiri nomor baris, bulatan merah)
+5. Tekan **F5** untuk mulai debug
+
+```json
+// .vscode/launch.json minimal
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Jalankan Vitest aktif",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "${file}"],
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
+```
+
+### Debug browser di VS Code (Edge/Chrome)
+Install ekstensi **Debugger for Chrome** (bawaan Edge/Chrome debugger sering sudah cukup) atau pakai built-in `launch.json`:
+```json
+{
+  "type": "chrome",
+  "request": "launch",
+  "name": "Debug Vite di Chrome",
+  "url": "http://localhost:5173",
+  "webRoot": "${workspaceFolder}/src"
+}
+```
+
+### Fitur inti debugger
+- **Breakpoint**: pause eksekusi di baris tertentu
+- **Step over (F10)**: jalankan baris berikut, lewati panggilan fungsi
+- **Step into (F11)**: masuk ke dalam fungsi
+- **Step out (Shift+F11)**: keluar dari fungsi sekarang
+- **Watch**: pantau ekspresi (`user.address?.city`, `x * 2`)
+- **Call Stack**: lintasan pemanggilan fungsi (untuk "bagaimana sampai sini?")
+- **Conditional breakpoint**: klik kanan breakpoint → "Edit Breakpoint" → kondisi, mis `i === 50` (pause hanya saat i=50)
+
+::: tip Trick `debugger; statement`
+Tulis `debugger;` di kode Anda. Saat DevTools terbuka di browser, eksekusi pause persis di baris itu — kalau DevTools tidak terbuka, baris ini diabaikan. Berguna saat console.log sudah tak cukup.
+:::
+
+---
+
 ## Tips Best Practices untuk Pemula
 
 1. **Selalu pakai `const`** — Kalau nilainya tidak berubah, gunakan `const`. Jika perlu re-assign, baru pakai `let`. JANGAN pakai `var`.

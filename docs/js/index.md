@@ -10,6 +10,62 @@ JavaScript memungkinkan Anda untuk:
 
 ---
 
+## Sekilas Sejarah Singkat
+
+Brendan Eich menulis JavaScript dalam **10 hari** pada Mei 1995 di Netscape. Awalnya dinamai Mocha → LiveScript → JavaScript (marketing decision untuk menumpang popularitas Java, meskipun dua bahasa tersebut tidak berhubungan sama sekali).
+
+Setelah era "browser war" antara Netscape vs Internet Explorer, JavaScript akhirnya distandardisasi menjadi **ECMAScript**. Tahun 2015, versi besar ES2015 (ES6) meremajakan JavaScript dengan `let`/`const`, arrow function, class, module, Promise, dan banyak lagi. Sejak itu, TC39 (komite standar) merilis versi baru tiap tahun: ES2020, ES2022, ES2024, dst. Era modern JavaScript dimulai.
+
+## ECMAScript vs JavaScript — Apa bedanya?
+
+- **ECMAScript** adalah **spesifikasi** (dokumen aturan) — defines syntax & semantics bahasa. Diurus oleh ECMA International (TC39 committee).
+- **JavaScript** adalah **implementasi praktis** ECMAScript + Web API (DOM, fetch, localStorage, dll).
+
+Bayangkan: ECMAScript adalah blueprint mobil; JavaScript adalah mobilnya. V8, SpiderMonkey, JavaScriptCore adalah mesin yang menjalankannya di browser/Node.
+
+## Cara Menjalankan JavaScript
+
+Pilih salah satu cara saat membaca materi ini:
+
+### 1. Browser Console — paling cepat untuk eksperimen
+Buka halaman apa pun di Chrome/Firefox → tekan `F12` → tab **Console**. Tik kode → Enter → lihat hasil instan. Cocok untuk mencoba sintaks satu baris.
+
+```js
+1 + 1                // → 2
+Array(3).fill("a")   // → ["a", "a", "a"]
+```
+
+### 2. File HTML dengan `<script>`
+```html
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Belajar JS</title></head>
+<body>
+  <script src="app.js"></script>           <!-- external (best practice) -->
+  <script>
+    console.log("inline juga bisa");
+  </script>
+</body>
+</html>
+```
+Buka file di browser → buka DevTools Console → lihat output.
+
+### 3. Node.js — untuk kode tanpa browser
+Setelah pasang [Node.js](https://nodejs.org/):
+```bash
+node app.js          # jalankan file
+node                 # REPL: prompt interaktif
+```
+Berguna saat belajar modul yang tidak butuh DOM (misal variabel, function, async).
+
+### 4. Editor online tanpa install
+- [CodeSandbox](https://codesandbox.io) — proyek full Vite/React/Vue
+- [StackBlitz](https://stackblitz.com) — VS Code di browser
+- [CodePen](https://codepen.io) — HTML/CSS/JS in one pen
+- [playcode.io](https://playcode.io) — cepat untuk snippet
+
+---
+
 ## 📚 Daftar Modul
 
 | # | Modul | Ringkasan |

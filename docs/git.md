@@ -285,6 +285,294 @@ Meskipun GUI memudahkan, **belajar Git lewat terminal adalah investasi terbaik**
 
 ---
 
+## Merge Conflict — Saat Dua Developer Mengubah File yang Sama
+
+Konflik terjadi ketika dua branch mengubah **baris yang sama** di file yang sama. Git tidak bisa memutuskan versi mana yang menang — ia menyerahkan ke Anda.
+
+Saat `git merge` (atau `git pull`) menjumpai konflik, file akan ditandai dengan penanda khusus:
+
+```
+<<<<<<< HEAD
+const nama = "Budi";          // versi lokal (branch sekarang)
+=======
+const nama = "Andi";          // versi dari branch masuk
+>>>>>>> fitur-nama-baru
+```
+
+Cara menyelesaikan:
+
+```bash
+# 1. Cek file yang konflik
+git status
+# both modified:   src/user.js
+
+# 2. Buka file di editor, cari penanda <<<<<<< ======= >>>>>>>
+#    - Pilih salah satu versi, ATAU gabung jadi versi baru
+#    - Hapus tanda penanda
+
+# 3. Setelah file bersih, stage & commit
+git add src/user.js
+git commit                  # tanpa -m → buka editor dgn pesan default
+```
+
+::: tip Cara cepat di VS Code
+Klik file yang konflik → VS Code menyoroti 4 tombol: **Accept Current** / **Accept Incoming** / **Accept Both** / **Compare**. Lebih cepat dari merangkai tangan.
+:::
+
+Untuk membatalkan merge yang belum rampung selesai:
+```bash
+git merge --abort       # kembali ke keadaan sebelum merge
+```
+
+::: warning Hindari konflik sejak awal
+- Buat branch kecil & merge cepat (1–2 hari, bukan 1 bulan)
+- Sering `git pull` dari `main`
+- Bagi file besar jadi file kecil agar jarang menyentuh baris yang sama
+- Diskusikan perubahan struktural besar dengan tim sebelum coding
+:::
+
+---
+
+## Rebase vs Merge — Kapan Pakai Yang Mana?
+
+`git rebase` adalah alternatif `git merge` yang menghasilkan **riwayat linear** (tidak ada commit merge). Ia "memindahkan" branch Anda ke atas ujung branch target, seolah-olah Anda mulai dari posisi terkini.
+
+```bash
+# Skenario: branch `fitur` dikerjakan 3 hari, sementara `main` sudah maju
+git checkout fitur
+git rebase main           # ulang commit-commit fitur di atas puncak main
+# Setiap commit lama fitur "di-copy" sebagai commit baru di atas main
+
+# Kalau ada konflik, resolve lalu:
+git rebase --continue
+# atau batalkan:
+git rebase --abort
+```
+
+| Aspek | `git merge` | `git rebase` |
+|---|---|---|
+| Riwayat | Ada commit merge (bifurkasi) | Linear, seolah satu jalur |
+| Keamanan | Aman — tidak ubah commit lama | Berbahaya kalau branch sudah di-push publik |
+| Kapan pakai | Branch fitur → main (umum) | Sinkronkan branch fitur ke main baru sebelum merge (`git pull --rebase`) |
+| Aturan emas | — | **Jangan rebase branch publik** yang sudah di-push & dikerjakan orang lain |
+
+**Aturan emas rebase:** *Jangan pernah rebase commit yang sudah ada di branch publik.* Rebase membuat commit baru (hash berubah) → push ditolak → rekan tim yang sudah pull akan bingung.
+
+### Squash: merapikan banyak commit sebelum merge
+Saat suatu fitur sudah rampung, Anda sering punya banyak commit kecil ("wip", "fix typo", "lagi fix"). Di Pull Request, squash menyatukannya jadi 1 commit yang bersih:
+
+```bash
+git rebase -i HEAD~3      # interactive rebase 3 commit terakhir
+# Pilih: pick / squash / reword / drop
+# squash  → gabung ke commit sebelumnya
+# reword  → ganti pesan commit
+# drop    → hapus commit
+```
+
+---
+
+## `git stash` — Parkir Perubahan yang Belum Di-commit
+
+Sedang coding di branch A, tapi tiba-tiba perlu switch ke branch B untuk fix bug. Perubahan yang belum di-commit akan ikut pindah (yang sering bikin bingung). `git stash` "menyimpannya ke kantong" sementara:
+
+```bash
+git stash                 # simpan perubahan belum-commit ke stash list
+git stash list            # lihat isi stash: stash@{0}, stash@{1}, ...
+git checkout main         # bebas pindah branch
+# ... fix bug, commit, kembali ke A
+git checkout A
+git stash pop             # ambil kembali stash terbaru & hapus dari list
+git stash apply           # ambil tapi tetap simpan di stash list (idempotent)
+git stash drop stash@{0}  # hapus satu stash
+git stash clear           # hapus semua
+```
+
+`git stash -u` juga menyertakan file *untracked* (baru). `git stash -m "pesan saya"` memberi label pada stash.
+
+---
+
+## `git cherry-pick` — Mengambil Commit Tertentu
+
+Kadang ada satu commit bagus di branch lain yang ingin Anda ambil **tanpa** meng-merge seluruh branch:
+
+```bash
+git cherry-pick <commit-hash>   # ambil 1 commit ke branch sekarang
+git cherry-pick A B C           # ambil 3 commit sekaligus
+git cherry-pick A..D            # ambil range (A tidak ikut, D ikut)
+```
+
+Hasilnya commit baru dengan ID berbeda tetapi isi patch sama.
+
+---
+
+## `git tag` — Menandai Versi Rilis
+
+Tag = penanda permanen pada commit tertentu, biasanya untuk rilis (`v1.0.0`). Berbeda dengan branch yang bergerak, tag diam di satu commit.
+
+```bash
+git tag v1.0.0                  # tag ringan (lightweight)
+git tag -a v1.0.0 -m "Rilis pertama"   # tag beranotasi (direkomendasikan)
+
+# Push tag ke remote (tidak otomatis ter-push bersama commit!)
+git push origin v1.0.0
+git push origin --tags         # push semua tag
+
+# Lihat & hapus
+git tag                        # daftar semua tag
+git tag -d v1.0.0              # hapus lokal
+git push origin :refs/tags/v1.0.0   # hapus dari remote
+```
+
+Konvensi [Semver](./glossary#semver-semantic-versioning): `vMAJOR.MINOR.PATCH` (mis `v1.4.2`). Tag beranotasi menyimpan pembuat, tanggal, & pesan — gunakan ini untuk rilis publik.
+
+---
+
+## Undo & Penyelamat: `reset` / `revert` / `reflog`
+
+Tiga senjata untuk membatalkan perubahan:
+
+### `git reset` — Pindahkan HEAD (lokal)
+```bash
+git reset --soft HEAD~1     # undo commit, perubahan tetap di staging
+git reset --mixed HEAD~1    # undo commit + unstaging (default)
+git reset --hard HEAD~1     # undo commit + HAPUS perubahan (berbahaya!)
+```
+::: warning
+`git reset --hard` menghapus perubahan yang belum di-commit **secara permanen**. Hanya `git reflog` yang bisa menyelamatkan Anda. Pakai hanya bila Anda yakin.
+:::
+
+### `git revert` — Buat Commit Kebalik (aman untuk branch publik)
+Tidak mengubah riwayat — melainkan menambah commit baru yang "membatalkan" commit target. **Pilihan aman untuk branch publik.**
+```bash
+git revert <commit-hash>    # buat commit baru yang membalik commit-hash
+git revert HEAD             # batalkan commit terakhir
+```
+
+### `git reflog` — Penyelamat Saat "Hilang"
+Git mencatat **setiap kali HEAD bergerak**, meskipun commit itu sudah tidak dirujuk branch mana pun. Anda bisa "kembali ke masa lalu" lewat reflog.
+
+```bash
+git reflog
+# a3b1c2d HEAD@{0}: reset: moving to HEAD~3
+# e4f5a6b HEAD@{1}: commit: percobaan yang tak sengaja ter-reset
+
+git reset --hard e4f5a6b    # kembalikan ke commit yang "hilang"
+```
+
+::: tip
+Semua commit yang Anda buat (bahkan setelah `reset --hard`) sebenarnya masih ada di Git selama ~30 hari. Jangan panik — `git reflog` mungkin bisa menolong.
+:::
+
+---
+
+## Melihat Riwayat: `git log` Versi Visualization
+
+```bash
+# Riwayat one-line
+git log --oneline
+
+# Dengan grafik branch (paling berguna)
+git log --oneline --graph --all
+# Output contoh:
+# * 9d7f3a2 (HEAD -> main) Merge pull request #42
+# |\
+# | * 2c1d3b7 (fitur-search) tambah komponen search
+# | * 8a9b3c1 wire up API
+# |/
+# * 4e5f6a7 refactor layout
+
+# Filter
+git log --author="Budi"            # hanya commit oleh Budi
+git log --since="2 weeks ago"      # 2 minggu terakhir
+git log --grep="fix"               # commit yang pesannya cocok regex
+git log -p src/user.js             # lihat diff file tertentu
+git log --stat                     # ringkasan file yang berubah tiap commit
+```
+
+Tip: alias `git lg` untuk perintah cantik:
+```bash
+git config --global alias.lg "log --oneline --graph --all --decorate"
+# Sekarang `git lg` = riwayat grafik indah
+```
+
+---
+
+## GitHub Flow — Kolaborasi Lewat Pull Request
+
+Saat bekerja di tim / proyek open source, alurnya:
+
+1. **Fork** repo target (kalau Anda bukan anggota) → muncul copy di akun Anda
+2. **Clone** fork ke lokal
+3. **Branch** baru: `git checkout -b fitur-newton`
+4. **Commit** perubahan kecil, sering
+5. **Push** ke fork Anda: `git push origin fitur-newton`
+6. Buka **Pull Request (PR)** di GitHub web dari fork → target branch
+7. **Review**: reviewer beri komentar/request changes
+8. Anda update (lanjut commit & push ke branch yang sama), PR otomatis update
+9. Setelah approved & lulus CI: **Squash & merge** (atau Rebase & merge) di GitHub
+10. Hapus branch lokal & remote
+
+Tip menjaga PR bersih:
+- 1 PR = 1 topik (jangan campur fitur yang tak berhubungan)
+- Tulis deskripsi PR jelas (apa, kenapa, cara test)
+- Tanggapi komentar review dengan commit perbaikan, bukan memaksa argumen
+
+---
+
+## Git Hooks & CI/CD — Otomatisasi
+
+### Git Hooks — script yang berjalan otomatis
+Git bisa menjalankan shell script pada event tertentu. Letakkan di `.git/hooks/` (file tanpa ekstensi, harus executable):
+
+| Hook | Kapan | Pakai umum |
+|---|---|---|
+| `pre-commit` | Sebelum commit dibuat | Lint, format, cek typo |
+| `commit-msg` | Saat tulis pesan commit | Validasi Conventional Commits |
+| `pre-push` | Sebelum push | Run test, build |
+| `post-merge` | Setelah merge | Install dependencies |
+
+Manual menyimpan hook di `.git/hooks/` rawan hilang saat clone. Pakai **[Husky](https://typicode.github.io/husky/)** + **lint-staged** agar hooks disimpan di repo:
+
+```bash
+npm install -D husky lint-staged
+npx husky init                          # buat .husky/pre-commit
+echo "npx lint-staged" > .husky/pre-commit
+```
+
+```json
+// package.json
+{
+  "lint-staged": {
+    "*.{js,ts}": ["eslint --fix", "prettier --write"],
+    "*.css": ["prettier --write"]
+  }
+}
+```
+
+### GitHub Actions — CI/CD populer untuk repo Git
+File YAML di `.github/workflows/*.yml` otomatis berjalan saat push/PR:
+
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci            # install seperti lock, bukan npm install
+      - run: npm run lint
+      - run: npm test          # jalankan unit test
+```
+
+Workflow umum:
+- **CI**: lint + typecheck + test on every PR → blokir merge jika gagal (lindungi `main` lewat branch protection rules)
+- **CD**: build & deploy otomatis saat tag/commit ke `main` → Vercel/Netlify/GitHub Pages
+
+---
+
 ## Cheat Sheet Perintah Git
 
 | Perintah | Fungsi |

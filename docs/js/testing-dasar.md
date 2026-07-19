@@ -285,6 +285,315 @@ function cekPalindrome(kata) {
 
 ---
 
+## Setup & Teardown: `beforeEach` / `afterEach`
+
+Sering kali beberapa test butuh **state awal yang sama** (mis: array yang sama, mock yang sama, file temp yang sama). Ketimbang mengetik ulang di tiap `test()`, Vitest menyediakan hook lifecycle:
+
+| Hook | Kapan berjalan |
+|---|---|
+| `beforeAll` | Sekali sebelum semua test di sebuah `describe`/file |
+| `beforeEach` | Sebelum tiap `test` |
+| `afterEach` | Setelah tiap `test` |
+| `afterAll` | Sekali setelah semua test selesai |
+
+```js
+import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
+import { TodoList } from "./todo.js";
+
+describe("TodoList", () => {
+  let todo;
+
+  beforeEach(() => {
+    // State bersih sebelum tiap test → test independen
+    todo = new TodoList();
+    todo.seed(["belajar", "mandi"]);
+  });
+
+  afterEach(() => {
+    // Bersihkan efek samping (mis: hapus file temp, reset mock)
+    vi.restoreAllMocks();
+  });
+
+  test("mulai dengan 2 item", () => {
+    expect(todo.items).toHaveLength(2);
+  });
+
+  test("bisa tambah item", () => {
+    todo.add("tidur");
+    expect(todo.items).toHaveLength(3);
+  });
+
+  test("tidak tercemar test sebelumnya", () => {
+    // Karena beforeEach bikin TodoList baru, tetap 2 item di sini
+    expect(todo.items).toHaveLength(2);
+  });
+});
+```
+
+::: tip Aturan emas testing
+Setiap test harus **independen** — boleh dijalankan dalam urutan apa pun, secara mandiri. Itulah kenapa `beforeEach` dipakai begitu sering: membangun state bersih yang sama tanpa duplikasi kode.
+:::
+
+---
+
+## Mocking — Mengisolasi Dependency
+
+**Mock** = mengganti dependency nyata (database, API, timer, modul lain) dengan versi palsu yang **terkontrol**. Tujuannya: test cepat, deterministik (tidak kena rate-limit / network), dan isolasi.
+
+### `vi.fn()` —/function Mock dasar
+```js
+import { vi } from "vitest";
+
+const mockMath = vi.fn();
+mockMath(2, 3);                     // panggil
+expect(mockMath).toHaveBeenCalled();
+expect(mockMath).toHaveBeenCalledWith(2, 3);
+
+// Set return value palsu
+mockMath.mockReturnValue(10);
+expect(mockMath(7, 8)).toBe(10);
+
+// Implementasi palsu
+mockMath.mockImplementation((a, b) => a + b);
+expect(mockMath(1, 2)).toBe(3);
+
+// Inspeksi: lihat semua "call" yang terjadi
+expect(mockMath.mock.calls).toHaveLength(4);
+expect(mockMath.mock.results[0].value).toBe(undefined);
+```
+
+### `vi.mock()` — Mock modul
+Mengganti export dari sebuah modul secara penuh. Sangat berguna saat kode Anda memanggil API eksternal atau database.
+
+```js
+// user.test.js
+import { describe, test, expect, vi } from "vitest";
+
+// WAJIB di top-level — di-hoist otomatis oleh Vitest sebelum import lain
+vi.mock("./api.js", () => ({
+  fetchUser: vi.fn(() => Promise.resolve({ id: 1, nama: "Budi" })),
+  saveUser: vi.fn(),
+}));
+
+import { fetchUser, saveUser } from "./api.js";
+import { getDisplayName } from "./user.js";
+
+describe("getDisplayName", () => {
+  test("mengembalikan nama user dari API mock", async () => {
+    const nama = await getDisplayName(1);
+    expect(nama).toBe("Budi");
+    expect(fetchUser).toHaveBeenCalledWith(1);
+  });
+});
+```
+
+### Mock vs Stub vs Spy — Apa beda?
+
+| Istilah | Perilaku | Contoh |
+|---|---|---|
+| **Mock** | Mengganti fungsi dengan versi palsu, dan **memverifikasi** dipanggil | Cek `fetchUser` dipanggil dengan ID `1` |
+| **Stub** | Mengganti fungasi dengan return value tetap, tanpa peduli dipanggil atau tidak | `clock = { now: () => 1000 }` |
+| **Spy** | Membungkus fungsi asli tetap dipanggil, tapi merekam aktivitasnya | `vi.spyOn(console, "log")` untuk cek pemanggilan, lalu restore |
+
+```js
+// Spy: bungkus fungsi ASLI, tetap dijalankan, tapi tercatat
+const spy = vi.spyOn(console, "log");
+myFunc();                              // benar-benar console.log
+expect(spy).toHaveBeenCalledWith("halo");
+spy.mockRestore();                     // kembalikan seperti semula
+```
+
+### Memalsukan timer (`vi.useFakeTimers`)
+Test yang melibatkan `setTimeout`/`setInterval` bisa berkualitas lama dan tidak stabil. Pakai fake timer:
+
+```js
+import { vi, test, expect } from "vitest";
+
+test("callback dipanggil setelah 1 detik", () => {
+  vi.useFakeTimers();
+  const cb = vi.fn();
+  setTimeout(cb, 1000);
+
+  // Memajukan waktu 1000ms secara instan tanpa menunggu sungguhan
+  vi.advanceTimersByTime(1000);
+  expect(cb).toHaveBeenCalled();
+
+  vi.useRealTimers();   // jangan lupa kembalikan
+});
+```
+
+---
+
+## Testing Asynchronous
+
+Banyak kode JavaScript bersifat async (Promise, fetch, query DB). Vitest mendukungnya dengan beberapa pola:
+
+### 1. `async/await` di dalam `test`
+Cara paling idiomatic: jadikan callback `test` menjadi `async` dan `await` Promise di dalamnya.
+
+```js
+test("fetch mengembalikan data user", async () => {
+  const user = await fetchUser(1);
+  expect(user.nama).toBe("Budi");
+});
+```
+
+### 2. `resolves` / `rejects` — assertion pada Promise
+Bila Anda tidak ingin pakai `await` eksplisit:
+```js
+test("Promise resolve", async () => {
+  await expect(fetchUser(1)).resolves.toEqual({ id: 1, nama: "Budi" });
+});
+
+test("Promise reject kalau ID tidak ada", async () => {
+  await expect(fetchUser(999)).rejects.toThrow("User tidak ditemukan");
+});
+```
+
+### 3. `waitFor` — polling untuk kondisi asinkron (Vitest Testing Library)
+Saat test DOM dengan update async yang belum jelas kapan selesai:
+```js
+import { render, screen, waitFor } from "@testing-library/vue";
+import Counter from "./Counter.vue";
+
+test("counter bertambah setelah klik", async () => {
+  render(Counter);
+  const btn = screen.getByText("Klik");
+
+  btn.click();
+  await waitFor(() => {
+    expect(screen.getByText("1")).toBeTruthy();
+  });
+});
+```
+
+::: warning
+**Jangan lupa `await`!** Tanpa `await`, test selesai sebelum Promise resolve → false positive (test "lulus" padahal belum dicek).
+:::
+
+---
+
+## Snapshot Testing
+
+Snapshot test = Vitest merekam **representasi string** dari output Anda, lalu menyimpannya di file `.snap`. Saat test berikutnya, jika output berubah, test gagal dan Anda diminta konfirmasi: apakah perubahan ini intentional?
+
+```js
+import { test, expect } from "vitest";
+import { formatInvoice } from "./invoice.js";
+
+test("format invoice cocok dengan snapshot", () => {
+  const output = formatInvoice({
+    id: "INV-001",
+    items: [{ nama: "Buku", harga: 10000, qty: 2 }],
+  });
+  expect(output).toMatchSnapshot();   // simpan/bandingkan ke file .snap
+});
+```
+
+Saat pertama dijalankan, file `__snapshots__/invoice.test.js.snap` dibuat. Saat berubah: `vitest -u` untuk update snapshot.
+
+⚠️ **Jangan snapshot data dinamis** (tanggal sekarang, UUID, random). Selalu mock dulu, atau pakai `toMatchSnapshot({ id: expect.any(String) })`.
+
+---
+
+## Coverage — Mengukur Cakupan Test
+
+**Coverage** mengukur persentase baris / cabang / fungsi yang "disentuh" test Anda. Bukan jaminan kualitas, tapi indikator.
+
+```bash
+npx vitest run --coverage
+```
+
+Anda perlu tambah provider coverage (Vitest v1+). Pakai `@vitest/coverage-v8` (cepat):
+
+```bash
+npm install -D @vitest/coverage-v8
+```
+
+Output berupa HTML report di `coverage/index.html`:
+
+| Metrik | Arti |
+|---|---|
+| **Lines** | % baris kode yang dieksekusi saat test |
+| **Branches** | % cabang `if/else`/switch yang diambil |
+| **Functions** | % fungsi yang dipanggil minimal sekali |
+| **Statements** | % statement total yang dijalankan |
+
+Konfigurasi target coverage di `vitest.config.ts`:
+```ts
+export default defineConfig({
+  test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      thresholds: { lines: 80, branches: 75 },  // wajib ≥ ambang ini
+    },
+  },
+});
+```
+
+::: warning Coverage tinggi ≠ kualitas tinggi
+Baris yang dijalankan tidak berarti dites dengan benar. Test `expect(1).toBe(1)` menaikkan coverage, tapi tidak terlalu berharga. Coverage = alat bantu, bukan tujuan.
+:::
+
+---
+
+## E2E Testing dengan Playwright (Sekilas)
+
+Unit test menguji satu fungsi. E2E test mensimulasikan **user sungguhan** di browser penuh: buka halaman → klik tombol → isi form → menunggu response → assert tampilan.
+
+**Playwright** (Microsoft) adalah tool E2E modern yang mendukung Chromium, Firefox, dan WebKit sekaligus.
+
+```bash
+npm install -D @playwright/test
+npx playwright install   # unduh browser driver
+```
+
+Contoh skrip `tests/login.spec.ts`:
+```ts
+import { test, expect } from "@playwright/test";
+
+test("user bisa login", async ({ page }) => {
+  await page.goto("http://localhost:5173/login");
+
+  await page.fill('input[name="email"]', "budi@example.com");
+  await page.fill('input[name="password"]', "rahasia");
+  await page.click('button[type="submit"]');
+
+  // Tunggu redirect ke dashboard
+  await expect(page).toHaveURL("/dashboard");
+  await expect(page.locator("h1")).toHaveText("Selamat datang, Budi");
+});
+```
+
+Cara jalankan:
+```bash
+npx playwright test           # jalankan semua spec
+npx playwright test --headed  # tampilkan browser (bukan headless)
+npx playwright show-report    # buka laporan HTML hasil test
+```
+
+::: tip
+Lihat `_snapshot/_trace.zip` saat test gagal — Playwright merekam screenshot, video, DOM snapshot, network log, dan console error lengkap. Sangat memudahkan debugging.
+:::
+
+### Kapan pakai apa?
+- **Unit** (∞ harian, detik): pure function, helper, util
+- **Integration** (mingguan): beberapa modul ESM bekerja bersama
+- **E2E** (sebelum deploy, menit/koneksi): alur kritis user (login, checkout, signup)
+
+Piramida testing (testing pyramid):
+```
+        /  E2E  \      ← sedikit, lambat, mahal
+       /----------\
+      / Integration \  ← sedang
+     /--------------\
+    /    Unit Tests   \ ← banyak, cepat, murah
+   /--------------------\
+```
+
+---
+
 ## Tips Testing untuk Pemula
 
 1. **Nama test harus deskriptif** — Baca nama test langsung paham apa yang diuji. `test("menjumlahkan dua bilangan negatif")` jauh lebih baik daripada `test("test1")`.
